@@ -1,5 +1,6 @@
 use std::fmt::{Display, Formatter};
-mod sys;
+pub mod sys;
+pub mod colors;
 
 pub trait Color {
     fn black(self) -> String;
