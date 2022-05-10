@@ -1,4 +1,5 @@
 use std::fmt::{Display, Formatter};
+mod sys;
 
 pub trait Color {
     fn black(self) -> String;
