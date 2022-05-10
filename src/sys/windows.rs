@@ -1,8 +1,8 @@
 // Reference https://docs.microsoft.com/en-us/windows/console/getconsolemode
 const ENABLE_VIRTUAL_TERMINAL_PROCESING: u32 = 0x0004;
 
+#[cfg(target_os = "windows")]
 pub fn enable_ansi_csi_on_windows() -> Result<(), std::io::Error> {
-
     use std::ffi::OsStr;
     use std::iter::once;
     use std::os::windows::ffi::OsStrExt;
@@ -26,18 +26,30 @@ pub fn enable_ansi_csi_on_windows() -> Result<(), std::io::Error> {
             null_mut(),
         );
         if console_handle == INVALID_HANDLE_VALUE {
-            return Err(std::io::Error::new(std::io::ErrorKind::Other, "Invalid handle value"));
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "Invalid handle value",
+            ));
         }
 
         let mut console_mode: u32 = 0;
 
         if 0 == GetConsoleMode(console_handle, &mut console_mode) {
-            return Err(std::io::Error::new(std::io::ErrorKind::Other, format!("GetConsoleMode failed! error code: {}", GetLastError())));
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                format!("GetConsoleMode failed! error code: {}", GetLastError()),
+            ));
         }
 
         if console_mode & ENABLE_VIRTUAL_TERMINAL_PROCESING == 0 {
-            if 0 == SetConsoleMode(console_handle, console_mode | ENABLE_VIRTUAL_TERMINAL_PROCESING) {
-                return Err(std::io::Error::new(std::io::ErrorKind::Other, format!("SetConsoleMode failed! error code: {}", GetLastError())));
+            if 0 == SetConsoleMode(
+                console_handle,
+                console_mode | ENABLE_VIRTUAL_TERMINAL_PROCESING,
+            ) {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    format!("SetConsoleMode failed! error code: {}", GetLastError()),
+                ));
             }
         }
         Ok(())

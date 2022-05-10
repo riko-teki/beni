@@ -1,8 +1,10 @@
 use std::fmt::Display;
 
 pub const CSI_START: &str = "\x1b[";
-
-// Select Graphic Rendition Parameters 
+pub const SET_FG_COLOR: &str = "\x1b[38;5;";
+pub const SET_BG_COLOR: &str = "\x1b[48;5;";
+pub const RESET: &str = "\x1b[0m";
+// Select Graphic Rendition Parameters
 #[repr(u8)]
 #[derive(Copy, Clone)]
 pub enum Sgr {
@@ -34,7 +36,7 @@ pub enum Sgr {
     NotBlink,
     ProportionalSpacing,
     NotReversed,
-    Reveal,	
+    Reveal,
     NotCrossedOut,
     SetForegroundColor30,
     SetForegroundColor31,
@@ -44,7 +46,7 @@ pub enum Sgr {
     SetForegroundColor35,
     SetForegroundColor36,
     SetForegroundColor37,
-	  SetForegroundColor,
+    SetForegroundColor,
     DefaultForegroundColor,
     SetBackgroundColor40,
     SetBackgroundColor41,
@@ -58,8 +60,8 @@ pub enum Sgr {
     DefaultBackgroundColor,
     DisableProportionalSpacing,
     Framed,
-  	Encircled,
-  	Overlined,
+    Encircled,
+    Overlined,
     NeitherFramedNorEncircled,
     NotOverlined,
     SetUnderlineColor,

@@ -1,3 +1,10 @@
+use std::fmt::Display;
+
+pub trait Color {
+    fn to_color_string(&self) -> String;
+}
+
+#[derive(Copy, Clone)]
 pub enum EightBitColors {
     Black,
     Red,
@@ -34,7 +41,7 @@ pub enum EightBitColors {
     DeepSkyBlue3b,
     DodgerBlue1,
     Green3a,
-    SpringGreen3a,
+    SprIngGreen3a,
     DarkCyan,
     LightSeaGreen,
     DeepSkyBlue2,
@@ -254,11 +261,17 @@ pub enum EightBitColors {
     Grey82,
     Grey85,
     Grey89,
-    Grey93,    
+    Grey93,
 }
 
-impl EightBitColors {
+impl Color for EightBitColors {
     fn to_color_string(&self) -> String {
-        return (*self as u8).to_string(); 
+        (*self as u8).to_string() 
+    }
+}
+
+impl Display for EightBitColors {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", *self as u8)
     }
 }
