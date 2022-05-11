@@ -4,6 +4,7 @@ pub const CSI_START: &str = "\x1b[";
 pub const SET_FG_COLOR: &str = "\x1b[38;5;";
 pub const SET_BG_COLOR: &str = "\x1b[48;5;";
 pub const RESET: &str = "\x1b[0m";
+
 // Select Graphic Rendition Parameters
 #[repr(u8)]
 #[derive(Copy, Clone)]

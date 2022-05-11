@@ -1,5 +1,5 @@
-use std::fmt::Display;
 use super::csi;
+use std::fmt::Display;
 
 pub trait Color {
     fn to_fg_color_string(&self) -> String;
@@ -268,14 +268,26 @@ pub enum EightBitColors {
 }
 
 impl Color for EightBitColors {
-    fn to_fg_color_string(&self)-> String {
-        format!("{}{}m{}{}",csi::SET_FG_COLOR,&self.to_color_number(),self.to_string(),csi::RESET)
+    fn to_fg_color_string(&self) -> String {
+        format!(
+            "{}{}m{}{}",
+            csi::SET_FG_COLOR,
+            &self.to_color_number(),
+            self,
+            csi::RESET
+        )
     }
     fn to_bg_color_string(&self) -> String {
-        format!("{}{}m{}{}",csi::SET_BG_COLOR,&self.to_color_number(),self.to_string(),csi::RESET)
+        format!(
+            "{}{}m{}{}",
+            csi::SET_BG_COLOR,
+            &self.to_color_number(),
+            self,
+            csi::RESET
+        )
     }
     fn to_color_number(&self) -> String {
-        (*self as u8).to_string() 
+        (*self as u8).to_string()
     }
 }
 
