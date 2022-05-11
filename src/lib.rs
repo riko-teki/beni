@@ -1,535 +1,1049 @@
-use std::fmt::{Display, Formatter};
-
 use colors::EightBitColors;
+use colors::Color;
 
 pub mod colors;
 pub mod csi;
 pub mod sys;
 
-pub trait Color {
+pub trait ColorString {
     fn fg_color<C: colors::Color>(self, color: C) -> String;
     fn bg_color<C: colors::Color>(self, color: C) -> String;
-    fn black(self) -> String;
-    fn red(self) -> String;
-    fn green(self) -> String;
-    fn yellow(self) -> String;
-    fn blue(self) -> String;
-    fn magenta(self) -> String;
-    fn cyan(self) -> String;
-    fn lightgray(self) -> String;
-    fn darkgray(self) -> String;
-    fn lightred(self) -> String;
-    fn lightgreen(self) -> String;
-    fn lightyellow(self) -> String;
-    fn lightblue(self) -> String;
-    fn lightmagenta(self) -> String;
-    fn lightcyan(self) -> String;
-    fn white(self) -> String;
-    fn grey0(self) -> String;
-    fn navyblue(self) -> String;
-    fn darkblue(self) -> String;
-    fn blue3a(self) -> String;
-    fn blue3b(self) -> String;
-    fn blue1(self) -> String;
-    fn darkgreen(self) -> String;
-    fn deepskyblue4a(self) -> String;
-    fn deepskyblue4b(self) -> String;
-    fn deepskyblue4c(self) -> String;
-    fn dodgerblue3(self) -> String;
-    fn dodgerblue2(self) -> String;
-    fn green4(self) -> String;
-    fn springgreen4(self) -> String;
-    fn turquoise4(self) -> String;
-    fn deepskyblue3a(self) -> String;
-    fn deepskyblue3b(self) -> String;
-    fn dodgerblue1(self) -> String;
-    fn green3a(self) -> String;
-    fn springgreen3a(self) -> String;
-    fn darkcyan(self) -> String;
-    fn lightseagreen(self) -> String;
-    fn deepskyblue2(self) -> String;
-    fn deepskyblue1(self) -> String;
-    fn green3b(self) -> String;
-    fn springgreen3b(self) -> String;
-    fn springgreen2a(self) -> String;
-    fn cyan3(self) -> String;
-    fn darkturquoise(self) -> String;
-    fn turquoise2(self) -> String;
-    fn green1(self) -> String;
-    fn springgreen2b(self) -> String;
-    fn springgreen1(self) -> String;
-    fn mediumspringgreen(self) -> String;
-    fn cyan2(self) -> String;
-    fn cyan1(self) -> String;
-    fn darkred1(self) -> String;
-    fn deeppink4a(self) -> String;
-    fn purple4a(self) -> String;
-    fn purple4b(self) -> String;
-    fn purple3(self) -> String;
-    fn blueviolet(self) -> String;
-    fn orange4a(self) -> String;
-    fn grey37(self) -> String;
-    fn mediumpurple4(self) -> String;
-    fn slateblue3a(self) -> String;
-    fn slateblue3b(self) -> String;
-    fn royalblue1(self) -> String;
-    fn chartreuse4(self) -> String;
-    fn darkseagreen4a(self) -> String;
-    fn paleturquoise4(self) -> String;
-    fn steelblue(self) -> String;
-    fn steelblue3(self) -> String;
-    fn cornflowerblue(self) -> String;
-    fn chartreuse3a(self) -> String;
-    fn darkseagreen4b(self) -> String;
-    fn cadetblue2(self) -> String;
-    fn cadetblue1(self) -> String;
-    fn skyblue3(self) -> String;
-    fn steelblue1a(self) -> String;
-    fn chartreuse3b(self) -> String;
-    fn palegreen3a(self) -> String;
-    fn seagreen3(self) -> String;
-    fn aquamarine3(self) -> String;
-    fn mediumturquoise(self) -> String;
-    fn steelblue1b(self) -> String;
-    fn chartreuse2a(self) -> String;
-    fn seagreen2(self) -> String;
-    fn seagreen1a(self) -> String;
-    fn seagreen1b(self) -> String;
-    fn aquamarine1a(self) -> String;
-    fn darkslategray2(self) -> String;
-    fn darkred2(self) -> String;
-    fn deeppink4b(self) -> String;
-    fn darkmagenta1(self) -> String;
-    fn darkmagenta2(self) -> String;
-    fn darkviolet1a(self) -> String;
-    fn purple1a(self) -> String;
-    fn orange4b(self) -> String;
-    fn lightpink4(self) -> String;
-    fn plum4(self) -> String;
-    fn mediumpurple3a(self) -> String;
-    fn mediumpurple3b(self) -> String;
-    fn slateblue1(self) -> String;
-    fn yellow4a(self) -> String;
-    fn wheat4(self) -> String;
-    fn grey53(self) -> String;
-    fn lightslategrey(self) -> String;
-    fn mediumpurple(self) -> String;
-    fn lightslateblue(self) -> String;
-    fn yellow4b(self) -> String;
-    fn darkolivegreen3a(self) -> String;
-    fn darkgreensea(self) -> String;
-    fn lightskyblue3a(self) -> String;
-    fn lightskyblue3b(self) -> String;
-    fn skyblue2(self) -> String;
-    fn chartreuse2b(self) -> String;
-    fn darkolivegreen3b(self) -> String;
-    fn palegreen3b(self) -> String;
-    fn darkseagreen3a(self) -> String;
-    fn darkslategray3(self) -> String;
-    fn skyblue1(self) -> String;
-    fn chartreuse1(self) -> String;
-    fn lightgreen2(self) -> String;
-    fn lightgreen3(self) -> String;
-    fn palegreen1a(self) -> String;
-    fn aquamarine1b(self) -> String;
-    fn darkslategray1(self) -> String;
-    fn red3a(self) -> String;
-    fn deeppink4c(self) -> String;
-    fn mediumvioletred(self) -> String;
-    fn magenta3a(self) -> String;
-    fn darkviolet1b(self) -> String;
-    fn purple1b(self) -> String;
-    fn darkorange3a(self) -> String;
-    fn indianred1a(self) -> String;
-    fn hotpink3a(self) -> String;
-    fn mediumorchid3(self) -> String;
-    fn mediumorchid(self) -> String;
-    fn mediumpurple2a(self) -> String;
-    fn darkgoldenrod(self) -> String;
-    fn lightsalmon3a(self) -> String;
-    fn rosybrown(self) -> String;
-    fn grey63(self) -> String;
-    fn mediumpurple2b(self) -> String;
-    fn mediumpurple1(self) -> String;
-    fn gold3a(self) -> String;
-    fn darkkhaki(self) -> String;
-    fn navajowhite3(self) -> String;
-    fn grey69(self) -> String;
-    fn lightsteelblue3(self) -> String;
-    fn lightsteelblue(self) -> String;
-    fn yellow3a(self) -> String;
-    fn darkolivegreen3(self) -> String;
-    fn darkseagreen3b(self) -> String;
-    fn darkseagreen2(self) -> String;
-    fn lightcyan3(self) -> String;
-    fn lightskyblue1(self) -> String;
-    fn greenyellow(self) -> String;
-    fn darkolivegreen2(self) -> String;
-    fn palegreen1b(self) -> String;
-    fn darkseagreen5b(self) -> String;
-    fn darkseagreen5a(self) -> String;
-    fn paleturquoise1(self) -> String;
-    fn red3b(self) -> String;
-    fn deeppink3a(self) -> String;
-    fn deeppink3b(self) -> String;
-    fn magenta3b(self) -> String;
-    fn magenta3c(self) -> String;
-    fn magenta2a(self) -> String;
-    fn darkorange3b(self) -> String;
-    fn indianred1b(self) -> String;
-    fn hotpink3b(self) -> String;
-    fn hotpink2(self) -> String;
-    fn orchid(self) -> String;
-    fn mediumorchid1a(self) -> String;
-    fn orange3(self) -> String;
-    fn lightsalmon3b(self) -> String;
-    fn lightpink3(self) -> String;
-    fn pink3(self) -> String;
-    fn plum3(self) -> String;
-    fn violet(self) -> String;
-    fn gold3b(self) -> String;
-    fn lightgoldenrod3(self) -> String;
-    fn tan(self) -> String;
-    fn mistyrose3(self) -> String;
-    fn thistle3(self) -> String;
-    fn plum2(self) -> String;
-    fn yellow3b(self) -> String;
-    fn khaki3(self) -> String;
-    fn lightgoldenrod2a(self) -> String;
-    fn lightyellow3(self) -> String;
-    fn grey84(self) -> String;
-    fn lightsteelblue1(self) -> String;
-    fn yellow2(self) -> String;
-    fn darkolivegreen1a(self) -> String;
-    fn darkolivegreen1b(self) -> String;
-    fn darkseagreen1(self) -> String;
-    fn honeydew2(self) -> String;
-    fn lightcyan1(self) -> String;
-    fn red1(self) -> String;
-    fn deeppink2(self) -> String;
-    fn deeppink1a(self) -> String;
-    fn deeppink1b(self) -> String;
-    fn magenta2b(self) -> String;
-    fn magenta1(self) -> String;
-    fn orangered1(self) -> String;
-    fn indianred1c(self) -> String;
-    fn indianred1d(self) -> String;
-    fn hotpink1a(self) -> String;
-    fn hotpink1b(self) -> String;
-    fn mediumorchid1b(self) -> String;
-    fn darkorange(self) -> String;
-    fn salmon1(self) -> String;
-    fn lightcoral(self) -> String;
-    fn palevioletred1(self) -> String;
-    fn orchid2(self) -> String;
-    fn orchid1(self) -> String;
-    fn orange1(self) -> String;
-    fn sandybrown(self) -> String;
-    fn lightsalmon1(self) -> String;
-    fn lightpink1(self) -> String;
-    fn pink1(self) -> String;
-    fn plum1(self) -> String;
-    fn gold1(self) -> String;
-    fn lightgoldenrod2b(self) -> String;
-    fn lightgoldenrod2c(self) -> String;
-    fn navajowhite1(self) -> String;
-    fn mistyrose1(self) -> String;
-    fn thistle1(self) -> String;
-    fn yellow1(self) -> String;
-    fn lightgoldenrod1(self) -> String;
-    fn khaki1(self) -> String;
-    fn wheat1(self) -> String;
-    fn cornsilk1(self) -> String;
-    fn grey100(self) -> String;
-    fn grey3(self) -> String;
-    fn grey7(self) -> String;
-    fn grey11(self) -> String;
-    fn grey15(self) -> String;
-    fn grey19(self) -> String;
-    fn grey23(self) -> String;
-    fn grey27(self) -> String;
-    fn grey30(self) -> String;
-    fn grey35(self) -> String;
-    fn grey39(self) -> String;
-    fn grey42(self) -> String;
-    fn grey46(self) -> String;
-    fn grey50(self) -> String;
-    fn grey54(self) -> String;
-    fn grey58(self) -> String;
-    fn grey62(self) -> String;
-    fn grey66(self) -> String;
-    fn grey70(self) -> String;
-    fn grey74(self) -> String;
-    fn grey78(self) -> String;
-    fn grey82(self) -> String;
-    fn grey85(self) -> String;
-    fn grey89(self) -> String;
-    fn grey93(self) -> String;
+    fn fg_black(self) -> String;
+    fn fg_red(self) -> String;
+    fn fg_green(self) -> String;
+    fn fg_yellow(self) -> String;
+    fn fg_blue(self) -> String;
+    fn fg_magenta(self) -> String;
+    fn fg_cyan(self) -> String;
+    fn fg_lightgray(self) -> String;
+    fn fg_darkgray(self) -> String;
+    fn fg_lightred(self) -> String;
+    fn fg_lightgreen(self) -> String;
+    fn fg_lightyellow(self) -> String;
+    fn fg_lightblue(self) -> String;
+    fn fg_lightmagenta(self) -> String;
+    fn fg_lightcyan(self) -> String;
+    fn fg_white(self) -> String;
+    fn fg_grey0(self) -> String;
+    fn fg_navyblue(self) -> String;
+    fn fg_darkblue(self) -> String;
+    fn fg_blue3a(self) -> String;
+    fn fg_blue3b(self) -> String;
+    fn fg_blue1(self) -> String;
+    fn fg_darkgreen(self) -> String;
+    fn fg_deepskyblue4a(self) -> String;
+    fn fg_deepskyblue4b(self) -> String;
+    fn fg_deepskyblue4c(self) -> String;
+    fn fg_dodgerblue3(self) -> String;
+    fn fg_dodgerblue2(self) -> String;
+    fn fg_green4(self) -> String;
+    fn fg_springgreen4(self) -> String;
+    fn fg_turquoise4(self) -> String;
+    fn fg_deepskyblue3a(self) -> String;
+    fn fg_deepskyblue3b(self) -> String;
+    fn fg_dodgerblue1(self) -> String;
+    fn fg_green3a(self) -> String;
+    fn fg_springgreen3a(self) -> String;
+    fn fg_darkcyan(self) -> String;
+    fn fg_lightseagreen(self) -> String;
+    fn fg_deepskyblue2(self) -> String;
+    fn fg_deepskyblue1(self) -> String;
+    fn fg_green3b(self) -> String;
+    fn fg_springgreen3b(self) -> String;
+    fn fg_springgreen2a(self) -> String;
+    fn fg_cyan3(self) -> String;
+    fn fg_darkturquoise(self) -> String;
+    fn fg_turquoise2(self) -> String;
+    fn fg_green1(self) -> String;
+    fn fg_springgreen2b(self) -> String;
+    fn fg_springgreen1(self) -> String;
+    fn fg_mediumspringgreen(self) -> String;
+    fn fg_cyan2(self) -> String;
+    fn fg_cyan1(self) -> String;
+    fn fg_darkred1(self) -> String;
+    fn fg_deeppink4a(self) -> String;
+    fn fg_purple4a(self) -> String;
+    fn fg_purple4b(self) -> String;
+    fn fg_purple3(self) -> String;
+    fn fg_blueviolet(self) -> String;
+    fn fg_orange4a(self) -> String;
+    fn fg_grey37(self) -> String;
+    fn fg_mediumpurple4(self) -> String;
+    fn fg_slateblue3a(self) -> String;
+    fn fg_slateblue3b(self) -> String;
+    fn fg_royalblue1(self) -> String;
+    fn fg_chartreuse4(self) -> String;
+    fn fg_darkseagreen4a(self) -> String;
+    fn fg_paleturquoise4(self) -> String;
+    fn fg_steelblue(self) -> String;
+    fn fg_steelblue3(self) -> String;
+    fn fg_cornflowerblue(self) -> String;
+    fn fg_chartreuse3a(self) -> String;
+    fn fg_darkseagreen4b(self) -> String;
+    fn fg_cadetblue2(self) -> String;
+    fn fg_cadetblue1(self) -> String;
+    fn fg_skyblue3(self) -> String;
+    fn fg_steelblue1a(self) -> String;
+    fn fg_chartreuse3b(self) -> String;
+    fn fg_palegreen3a(self) -> String;
+    fn fg_seagreen3(self) -> String;
+    fn fg_aquamarine3(self) -> String;
+    fn fg_mediumturquoise(self) -> String;
+    fn fg_steelblue1b(self) -> String;
+    fn fg_chartreuse2a(self) -> String;
+    fn fg_seagreen2(self) -> String;
+    fn fg_seagreen1a(self) -> String;
+    fn fg_seagreen1b(self) -> String;
+    fn fg_aquamarine1a(self) -> String;
+    fn fg_darkslategray2(self) -> String;
+    fn fg_darkred2(self) -> String;
+    fn fg_deeppink4b(self) -> String;
+    fn fg_darkmagenta1(self) -> String;
+    fn fg_darkmagenta2(self) -> String;
+    fn fg_darkviolet1a(self) -> String;
+    fn fg_purple1a(self) -> String;
+    fn fg_orange4b(self) -> String;
+    fn fg_lightpink4(self) -> String;
+    fn fg_plum4(self) -> String;
+    fn fg_mediumpurple3a(self) -> String;
+    fn fg_mediumpurple3b(self) -> String;
+    fn fg_slateblue1(self) -> String;
+    fn fg_yellow4a(self) -> String;
+    fn fg_wheat4(self) -> String;
+    fn fg_grey53(self) -> String;
+    fn fg_lightslategrey(self) -> String;
+    fn fg_mediumpurple(self) -> String;
+    fn fg_lightslateblue(self) -> String;
+    fn fg_yellow4b(self) -> String;
+    fn fg_darkolivegreen3a(self) -> String;
+    fn fg_darkgreensea(self) -> String;
+    fn fg_lightskyblue3a(self) -> String;
+    fn fg_lightskyblue3b(self) -> String;
+    fn fg_skyblue2(self) -> String;
+    fn fg_chartreuse2b(self) -> String;
+    fn fg_darkolivegreen3b(self) -> String;
+    fn fg_palegreen3b(self) -> String;
+    fn fg_darkseagreen3a(self) -> String;
+    fn fg_darkslategray3(self) -> String;
+    fn fg_skyblue1(self) -> String;
+    fn fg_chartreuse1(self) -> String;
+    fn fg_lightgreen2(self) -> String;
+    fn fg_lightgreen3(self) -> String;
+    fn fg_palegreen1a(self) -> String;
+    fn fg_aquamarine1b(self) -> String;
+    fn fg_darkslategray1(self) -> String;
+    fn fg_red3a(self) -> String;
+    fn fg_deeppink4c(self) -> String;
+    fn fg_mediumvioletred(self) -> String;
+    fn fg_magenta3a(self) -> String;
+    fn fg_darkviolet1b(self) -> String;
+    fn fg_purple1b(self) -> String;
+    fn fg_darkorange3a(self) -> String;
+    fn fg_indianred1a(self) -> String;
+    fn fg_hotpink3a(self) -> String;
+    fn fg_mediumorchid3(self) -> String;
+    fn fg_mediumorchid(self) -> String;
+    fn fg_mediumpurple2a(self) -> String;
+    fn fg_darkgoldenrod(self) -> String;
+    fn fg_lightsalmon3a(self) -> String;
+    fn fg_rosybrown(self) -> String;
+    fn fg_grey63(self) -> String;
+    fn fg_mediumpurple2b(self) -> String;
+    fn fg_mediumpurple1(self) -> String;
+    fn fg_gold3a(self) -> String;
+    fn fg_darkkhaki(self) -> String;
+    fn fg_navajowhite3(self) -> String;
+    fn fg_grey69(self) -> String;
+    fn fg_lightsteelblue3(self) -> String;
+    fn fg_lightsteelblue(self) -> String;
+    fn fg_yellow3a(self) -> String;
+    fn fg_darkolivegreen3(self) -> String;
+    fn fg_darkseagreen3b(self) -> String;
+    fn fg_darkseagreen2(self) -> String;
+    fn fg_lightcyan3(self) -> String;
+    fn fg_lightskyblue1(self) -> String;
+    fn fg_greenyellow(self) -> String;
+    fn fg_darkolivegreen2(self) -> String;
+    fn fg_palegreen1b(self) -> String;
+    fn fg_darkseagreen5b(self) -> String;
+    fn fg_darkseagreen5a(self) -> String;
+    fn fg_paleturquoise1(self) -> String;
+    fn fg_red3b(self) -> String;
+    fn fg_deeppink3a(self) -> String;
+    fn fg_deeppink3b(self) -> String;
+    fn fg_magenta3b(self) -> String;
+    fn fg_magenta3c(self) -> String;
+    fn fg_magenta2a(self) -> String;
+    fn fg_darkorange3b(self) -> String;
+    fn fg_indianred1b(self) -> String;
+    fn fg_hotpink3b(self) -> String;
+    fn fg_hotpink2(self) -> String;
+    fn fg_orchid(self) -> String;
+    fn fg_mediumorchid1a(self) -> String;
+    fn fg_orange3(self) -> String;
+    fn fg_lightsalmon3b(self) -> String;
+    fn fg_lightpink3(self) -> String;
+    fn fg_pink3(self) -> String;
+    fn fg_plum3(self) -> String;
+    fn fg_violet(self) -> String;
+    fn fg_gold3b(self) -> String;
+    fn fg_lightgoldenrod3(self) -> String;
+    fn fg_tan(self) -> String;
+    fn fg_mistyrose3(self) -> String;
+    fn fg_thistle3(self) -> String;
+    fn fg_plum2(self) -> String;
+    fn fg_yellow3b(self) -> String;
+    fn fg_khaki3(self) -> String;
+    fn fg_lightgoldenrod2a(self) -> String;
+    fn fg_lightyellow3(self) -> String;
+    fn fg_grey84(self) -> String;
+    fn fg_lightsteelblue1(self) -> String;
+    fn fg_yellow2(self) -> String;
+    fn fg_darkolivegreen1a(self) -> String;
+    fn fg_darkolivegreen1b(self) -> String;
+    fn fg_darkseagreen1(self) -> String;
+    fn fg_honeydew2(self) -> String;
+    fn fg_lightcyan1(self) -> String;
+    fn fg_red1(self) -> String;
+    fn fg_deeppink2(self) -> String;
+    fn fg_deeppink1a(self) -> String;
+    fn fg_deeppink1b(self) -> String;
+    fn fg_magenta2b(self) -> String;
+    fn fg_magenta1(self) -> String;
+    fn fg_orangered1(self) -> String;
+    fn fg_indianred1c(self) -> String;
+    fn fg_indianred1d(self) -> String;
+    fn fg_hotpink1a(self) -> String;
+    fn fg_hotpink1b(self) -> String;
+    fn fg_mediumorchid1b(self) -> String;
+    fn fg_darkorange(self) -> String;
+    fn fg_salmon1(self) -> String;
+    fn fg_lightcoral(self) -> String;
+    fn fg_palevioletred1(self) -> String;
+    fn fg_orchid2(self) -> String;
+    fn fg_orchid1(self) -> String;
+    fn fg_orange1(self) -> String;
+    fn fg_sandybrown(self) -> String;
+    fn fg_lightsalmon1(self) -> String;
+    fn fg_lightpink1(self) -> String;
+    fn fg_pink1(self) -> String;
+    fn fg_plum1(self) -> String;
+    fn fg_gold1(self) -> String;
+    fn fg_lightgoldenrod2b(self) -> String;
+    fn fg_lightgoldenrod2c(self) -> String;
+    fn fg_navajowhite1(self) -> String;
+    fn fg_mistyrose1(self) -> String;
+    fn fg_thistle1(self) -> String;
+    fn fg_yellow1(self) -> String;
+    fn fg_lightgoldenrod1(self) -> String;
+    fn fg_khaki1(self) -> String;
+    fn fg_wheat1(self) -> String;
+    fn fg_cornsilk1(self) -> String;
+    fn fg_grey100(self) -> String;
+    fn fg_grey3(self) -> String;
+    fn fg_grey7(self) -> String;
+    fn fg_grey11(self) -> String;
+    fn fg_grey15(self) -> String;
+    fn fg_grey19(self) -> String;
+    fn fg_grey23(self) -> String;
+    fn fg_grey27(self) -> String;
+    fn fg_grey30(self) -> String;
+    fn fg_grey35(self) -> String;
+    fn fg_grey39(self) -> String;
+    fn fg_grey42(self) -> String;
+    fn fg_grey46(self) -> String;
+    fn fg_grey50(self) -> String;
+    fn fg_grey54(self) -> String;
+    fn fg_grey58(self) -> String;
+    fn fg_grey62(self) -> String;
+    fn fg_grey66(self) -> String;
+    fn fg_grey70(self) -> String;
+    fn fg_grey74(self) -> String;
+    fn fg_grey78(self) -> String;
+    fn fg_grey82(self) -> String;
+    fn fg_grey85(self) -> String;
+    fn fg_grey89(self) -> String;
+    fn fg_grey93(self) -> String;
+
+    // background
+    fn bg_black(self) -> String;
+    fn bg_red(self) -> String;
+    fn bg_green(self) -> String;
+    fn bg_yellow(self) -> String;
+    fn bg_blue(self) -> String;
+    fn bg_magenta(self) -> String;
+    fn bg_cyan(self) -> String;
+    fn bg_lightgray(self) -> String;
+    fn bg_darkgray(self) -> String;
+    fn bg_lightred(self) -> String;
+    fn bg_lightgreen(self) -> String;
+    fn bg_lightyellow(self) -> String;
+    fn bg_lightblue(self) -> String;
+    fn bg_lightmagenta(self) -> String;
+    fn bg_lightcyan(self) -> String;
+    fn bg_white(self) -> String;
+    fn bg_grey0(self) -> String;
+    fn bg_navyblue(self) -> String;
+    fn bg_darkblue(self) -> String;
+    fn bg_blue3a(self) -> String;
+    fn bg_blue3b(self) -> String;
+    fn bg_blue1(self) -> String;
+    fn bg_darkgreen(self) -> String;
+    fn bg_deepskyblue4a(self) -> String;
+    fn bg_deepskyblue4b(self) -> String;
+    fn bg_deepskyblue4c(self) -> String;
+    fn bg_dodgerblue3(self) -> String;
+    fn bg_dodgerblue2(self) -> String;
+    fn bg_green4(self) -> String;
+    fn bg_springgreen4(self) -> String;
+    fn bg_turquoise4(self) -> String;
+    fn bg_deepskyblue3a(self) -> String;
+    fn bg_deepskyblue3b(self) -> String;
+    fn bg_dodgerblue1(self) -> String;
+    fn bg_green3a(self) -> String;
+    fn bg_springgreen3a(self) -> String;
+    fn bg_darkcyan(self) -> String;
+    fn bg_lightseagreen(self) -> String;
+    fn bg_deepskyblue2(self) -> String;
+    fn bg_deepskyblue1(self) -> String;
+    fn bg_green3b(self) -> String;
+    fn bg_springgreen3b(self) -> String;
+    fn bg_springgreen2a(self) -> String;
+    fn bg_cyan3(self) -> String;
+    fn bg_darkturquoise(self) -> String;
+    fn bg_turquoise2(self) -> String;
+    fn bg_green1(self) -> String;
+    fn bg_springgreen2b(self) -> String;
+    fn bg_springgreen1(self) -> String;
+    fn bg_mediumspringgreen(self) -> String;
+    fn bg_cyan2(self) -> String;
+    fn bg_cyan1(self) -> String;
+    fn bg_darkred1(self) -> String;
+    fn bg_deeppink4a(self) -> String;
+    fn bg_purple4a(self) -> String;
+    fn bg_purple4b(self) -> String;
+    fn bg_purple3(self) -> String;
+    fn bg_blueviolet(self) -> String;
+    fn bg_orange4a(self) -> String;
+    fn bg_grey37(self) -> String;
+    fn bg_mediumpurple4(self) -> String;
+    fn bg_slateblue3a(self) -> String;
+    fn bg_slateblue3b(self) -> String;
+    fn bg_royalblue1(self) -> String;
+    fn bg_chartreuse4(self) -> String;
+    fn bg_darkseagreen4a(self) -> String;
+    fn bg_paleturquoise4(self) -> String;
+    fn bg_steelblue(self) -> String;
+    fn bg_steelblue3(self) -> String;
+    fn bg_cornflowerblue(self) -> String;
+    fn bg_chartreuse3a(self) -> String;
+    fn bg_darkseagreen4b(self) -> String;
+    fn bg_cadetblue2(self) -> String;
+    fn bg_cadetblue1(self) -> String;
+    fn bg_skyblue3(self) -> String;
+    fn bg_steelblue1a(self) -> String;
+    fn bg_chartreuse3b(self) -> String;
+    fn bg_palegreen3a(self) -> String;
+    fn bg_seagreen3(self) -> String;
+    fn bg_aquamarine3(self) -> String;
+    fn bg_mediumturquoise(self) -> String;
+    fn bg_steelblue1b(self) -> String;
+    fn bg_chartreuse2a(self) -> String;
+    fn bg_seagreen2(self) -> String;
+    fn bg_seagreen1a(self) -> String;
+    fn bg_seagreen1b(self) -> String;
+    fn bg_aquamarine1a(self) -> String;
+    fn bg_darkslategray2(self) -> String;
+    fn bg_darkred2(self) -> String;
+    fn bg_deeppink4b(self) -> String;
+    fn bg_darkmagenta1(self) -> String;
+    fn bg_darkmagenta2(self) -> String;
+    fn bg_darkviolet1a(self) -> String;
+    fn bg_purple1a(self) -> String;
+    fn bg_orange4b(self) -> String;
+    fn bg_lightpink4(self) -> String;
+    fn bg_plum4(self) -> String;
+    fn bg_mediumpurple3a(self) -> String;
+    fn bg_mediumpurple3b(self) -> String;
+    fn bg_slateblue1(self) -> String;
+    fn bg_yellow4a(self) -> String;
+    fn bg_wheat4(self) -> String;
+    fn bg_grey53(self) -> String;
+    fn bg_lightslategrey(self) -> String;
+    fn bg_mediumpurple(self) -> String;
+    fn bg_lightslateblue(self) -> String;
+    fn bg_yellow4b(self) -> String;
+    fn bg_darkolivegreen3a(self) -> String;
+    fn bg_darkgreensea(self) -> String;
+    fn bg_lightskyblue3a(self) -> String;
+    fn bg_lightskyblue3b(self) -> String;
+    fn bg_skyblue2(self) -> String;
+    fn bg_chartreuse2b(self) -> String;
+    fn bg_darkolivegreen3b(self) -> String;
+    fn bg_palegreen3b(self) -> String;
+    fn bg_darkseagreen3a(self) -> String;
+    fn bg_darkslategray3(self) -> String;
+    fn bg_skyblue1(self) -> String;
+    fn bg_chartreuse1(self) -> String;
+    fn bg_lightgreen2(self) -> String;
+    fn bg_lightgreen3(self) -> String;
+    fn bg_palegreen1a(self) -> String;
+    fn bg_aquamarine1b(self) -> String;
+    fn bg_darkslategray1(self) -> String;
+    fn bg_red3a(self) -> String;
+    fn bg_deeppink4c(self) -> String;
+    fn bg_mediumvioletred(self) -> String;
+    fn bg_magenta3a(self) -> String;
+    fn bg_darkviolet1b(self) -> String;
+    fn bg_purple1b(self) -> String;
+    fn bg_darkorange3a(self) -> String;
+    fn bg_indianred1a(self) -> String;
+    fn bg_hotpink3a(self) -> String;
+    fn bg_mediumorchid3(self) -> String;
+    fn bg_mediumorchid(self) -> String;
+    fn bg_mediumpurple2a(self) -> String;
+    fn bg_darkgoldenrod(self) -> String;
+    fn bg_lightsalmon3a(self) -> String;
+    fn bg_rosybrown(self) -> String;
+    fn bg_grey63(self) -> String;
+    fn bg_mediumpurple2b(self) -> String;
+    fn bg_mediumpurple1(self) -> String;
+    fn bg_gold3a(self) -> String;
+    fn bg_darkkhaki(self) -> String;
+    fn bg_navajowhite3(self) -> String;
+    fn bg_grey69(self) -> String;
+    fn bg_lightsteelblue3(self) -> String;
+    fn bg_lightsteelblue(self) -> String;
+    fn bg_yellow3a(self) -> String;
+    fn bg_darkolivegreen3(self) -> String;
+    fn bg_darkseagreen3b(self) -> String;
+    fn bg_darkseagreen2(self) -> String;
+    fn bg_lightcyan3(self) -> String;
+    fn bg_lightskyblue1(self) -> String;
+    fn bg_greenyellow(self) -> String;
+    fn bg_darkolivegreen2(self) -> String;
+    fn bg_palegreen1b(self) -> String;
+    fn bg_darkseagreen5b(self) -> String;
+    fn bg_darkseagreen5a(self) -> String;
+    fn bg_paleturquoise1(self) -> String;
+    fn bg_red3b(self) -> String;
+    fn bg_deeppink3a(self) -> String;
+    fn bg_deeppink3b(self) -> String;
+    fn bg_magenta3b(self) -> String;
+    fn bg_magenta3c(self) -> String;
+    fn bg_magenta2a(self) -> String;
+    fn bg_darkorange3b(self) -> String;
+    fn bg_indianred1b(self) -> String;
+    fn bg_hotpink3b(self) -> String;
+    fn bg_hotpink2(self) -> String;
+    fn bg_orchid(self) -> String;
+    fn bg_mediumorchid1a(self) -> String;
+    fn bg_orange3(self) -> String;
+    fn bg_lightsalmon3b(self) -> String;
+    fn bg_lightpink3(self) -> String;
+    fn bg_pink3(self) -> String;
+    fn bg_plum3(self) -> String;
+    fn bg_violet(self) -> String;
+    fn bg_gold3b(self) -> String;
+    fn bg_lightgoldenrod3(self) -> String;
+    fn bg_tan(self) -> String;
+    fn bg_mistyrose3(self) -> String;
+    fn bg_thistle3(self) -> String;
+    fn bg_plum2(self) -> String;
+    fn bg_yellow3b(self) -> String;
+    fn bg_khaki3(self) -> String;
+    fn bg_lightgoldenrod2a(self) -> String;
+    fn bg_lightyellow3(self) -> String;
+    fn bg_grey84(self) -> String;
+    fn bg_lightsteelblue1(self) -> String;
+    fn bg_yellow2(self) -> String;
+    fn bg_darkolivegreen1a(self) -> String;
+    fn bg_darkolivegreen1b(self) -> String;
+    fn bg_darkseagreen1(self) -> String;
+    fn bg_honeydew2(self) -> String;
+    fn bg_lightcyan1(self) -> String;
+    fn bg_red1(self) -> String;
+    fn bg_deeppink2(self) -> String;
+    fn bg_deeppink1a(self) -> String;
+    fn bg_deeppink1b(self) -> String;
+    fn bg_magenta2b(self) -> String;
+    fn bg_magenta1(self) -> String;
+    fn bg_orangered1(self) -> String;
+    fn bg_indianred1c(self) -> String;
+    fn bg_indianred1d(self) -> String;
+    fn bg_hotpink1a(self) -> String;
+    fn bg_hotpink1b(self) -> String;
+    fn bg_mediumorchid1b(self) -> String;
+    fn bg_darkorange(self) -> String;
+    fn bg_salmon1(self) -> String;
+    fn bg_lightcoral(self) -> String;
+    fn bg_palevioletred1(self) -> String;
+    fn bg_orchid2(self) -> String;
+    fn bg_orchid1(self) -> String;
+    fn bg_orange1(self) -> String;
+    fn bg_sandybrown(self) -> String;
+    fn bg_lightsalmon1(self) -> String;
+    fn bg_lightpink1(self) -> String;
+    fn bg_pink1(self) -> String;
+    fn bg_plum1(self) -> String;
+    fn bg_gold1(self) -> String;
+    fn bg_lightgoldenrod2b(self) -> String;
+    fn bg_lightgoldenrod2c(self) -> String;
+    fn bg_navajowhite1(self) -> String;
+    fn bg_mistyrose1(self) -> String;
+    fn bg_thistle1(self) -> String;
+    fn bg_yellow1(self) -> String;
+    fn bg_lightgoldenrod1(self) -> String;
+    fn bg_khaki1(self) -> String;
+    fn bg_wheat1(self) -> String;
+    fn bg_cornsilk1(self) -> String;
+    fn bg_grey100(self) -> String;
+    fn bg_grey3(self) -> String;
+    fn bg_grey7(self) -> String;
+    fn bg_grey11(self) -> String;
+    fn bg_grey15(self) -> String;
+    fn bg_grey19(self) -> String;
+    fn bg_grey23(self) -> String;
+    fn bg_grey27(self) -> String;
+    fn bg_grey30(self) -> String;
+    fn bg_grey35(self) -> String;
+    fn bg_grey39(self) -> String;
+    fn bg_grey42(self) -> String;
+    fn bg_grey46(self) -> String;
+    fn bg_grey50(self) -> String;
+    fn bg_grey54(self) -> String;
+    fn bg_grey58(self) -> String;
+    fn bg_grey62(self) -> String;
+    fn bg_grey66(self) -> String;
+    fn bg_grey70(self) -> String;
+    fn bg_grey74(self) -> String;
+    fn bg_grey78(self) -> String;
+    fn bg_grey82(self) -> String;
+    fn bg_grey85(self) -> String;
+    fn bg_grey89(self) -> String;
+    fn bg_grey93(self) -> String;
 }
 
-impl<T> Color for T where T: StringMarker {
+impl<T> ColorString for T where T: StringMarker {
     fn fg_color<C: colors::Color>(self, color: C) -> String {
-        format!("{}{}m{}{}",csi::SET_FG_COLOR,&color.to_color_string(),self.to_string(),csi::RESET)
+        color.to_fg_color_string()
     }
     fn bg_color<C: colors::Color>(self, color: C) -> String {
-        format!("{}{}m{}{}",csi::SET_BG_COLOR,&color.to_color_string(),self.to_string(),csi::RESET)
+        color.to_bg_color_string()
     }
-    fn black(self) -> String { format!("{}{}m{}{}",csi::SET_FG_COLOR,EightBitColors::Black,self.to_string(),csi::RESET) }
-    fn red(self) -> String { format!("{}{}m{}{}",csi::SET_FG_COLOR,EightBitColors::Red,self.to_string(),csi::RESET) }
-    fn green(self) -> String {"".to_string()}
-    fn yellow(self) -> String {"".to_string()}
-    fn blue(self) -> String {"".to_string()}
-    fn magenta(self) -> String {"".to_string()}
-    fn cyan(self) -> String {"".to_string()}
-    fn lightgray(self) -> String {"".to_string()}
-    fn darkgray(self) -> String {"".to_string()}
-    fn lightred(self) -> String {"".to_string()}
-    fn lightgreen(self) -> String {"".to_string()}
-    fn lightyellow(self) -> String {"".to_string()}
-    fn lightblue(self) -> String {"".to_string()}
-    fn lightmagenta(self) -> String {"".to_string()}
-    fn lightcyan(self) -> String {"".to_string()}
-    fn white(self) -> String {"".to_string()}
-    fn grey0(self) -> String {"".to_string()}
-    fn navyblue(self) -> String {"".to_string()}
-    fn darkblue(self) -> String {"".to_string()}
-    fn blue3a(self) -> String {"".to_string()}
-    fn blue3b(self) -> String {"".to_string()}
-    fn blue1(self) -> String {"".to_string()}
-    fn darkgreen(self) -> String {"".to_string()}
-    fn deepskyblue4a(self) -> String {"".to_string()}
-    fn deepskyblue4b(self) -> String {"".to_string()}
-    fn deepskyblue4c(self) -> String {"".to_string()}
-    fn dodgerblue3(self) -> String {"".to_string()}
-    fn dodgerblue2(self) -> String {"".to_string()}
-    fn green4(self) -> String {"".to_string()}
-    fn springgreen4(self) -> String {"".to_string()}
-    fn turquoise4(self) -> String {"".to_string()}
-    fn deepskyblue3a(self) -> String {"".to_string()}
-    fn deepskyblue3b(self) -> String {"".to_string()}
-    fn dodgerblue1(self) -> String {"".to_string()}
-    fn green3a(self) -> String {"".to_string()}
-    fn springgreen3a(self) -> String {"".to_string()}
-    fn darkcyan(self) -> String {"".to_string()}
-    fn lightseagreen(self) -> String {"".to_string()}
-    fn deepskyblue2(self) -> String {"".to_string()}
-    fn deepskyblue1(self) -> String {"".to_string()}
-    fn green3b(self) -> String {"".to_string()}
-    fn springgreen3b(self) -> String {"".to_string()}
-    fn springgreen2a(self) -> String {"".to_string()}
-    fn cyan3(self) -> String {"".to_string()}
-    fn darkturquoise(self) -> String {"".to_string()}
-    fn turquoise2(self) -> String {"".to_string()}
-    fn green1(self) -> String {"".to_string()}
-    fn springgreen2b(self) -> String {"".to_string()}
-    fn springgreen1(self) -> String {"".to_string()}
-    fn mediumspringgreen(self) -> String {"".to_string()}
-    fn cyan2(self) -> String {"".to_string()}
-    fn cyan1(self) -> String {"".to_string()}
-    fn darkred1(self) -> String {"".to_string()}
-    fn deeppink4a(self) -> String {"".to_string()}
-    fn purple4a(self) -> String {"".to_string()}
-    fn purple4b(self) -> String {"".to_string()}
-    fn purple3(self) -> String {"".to_string()}
-    fn blueviolet(self) -> String {"".to_string()}
-    fn orange4a(self) -> String {"".to_string()}
-    fn grey37(self) -> String {"".to_string()}
-    fn mediumpurple4(self) -> String {"".to_string()}
-    fn slateblue3a(self) -> String {"".to_string()}
-    fn slateblue3b(self) -> String {"".to_string()}
-    fn royalblue1(self) -> String {"".to_string()}
-    fn chartreuse4(self) -> String {"".to_string()}
-    fn darkseagreen4a(self) -> String {"".to_string()}
-    fn paleturquoise4(self) -> String {"".to_string()}
-    fn steelblue(self) -> String {"".to_string()}
-    fn steelblue3(self) -> String {"".to_string()}
-    fn cornflowerblue(self) -> String {"".to_string()}
-    fn chartreuse3a(self) -> String {"".to_string()}
-    fn darkseagreen4b(self) -> String {"".to_string()}
-    fn cadetblue2(self) -> String {"".to_string()}
-    fn cadetblue1(self) -> String {"".to_string()}
-    fn skyblue3(self) -> String {"".to_string()}
-    fn steelblue1a(self) -> String {"".to_string()}
-    fn chartreuse3b(self) -> String {"".to_string()}
-    fn palegreen3a(self) -> String {"".to_string()}
-    fn seagreen3(self) -> String {"".to_string()}
-    fn aquamarine3(self) -> String {"".to_string()}
-    fn mediumturquoise(self) -> String {"".to_string()}
-    fn steelblue1b(self) -> String {"".to_string()}
-    fn chartreuse2a(self) -> String {"".to_string()}
-    fn seagreen2(self) -> String {"".to_string()}
-    fn seagreen1a(self) -> String {"".to_string()}
-    fn seagreen1b(self) -> String {"".to_string()}
-    fn aquamarine1a(self) -> String {"".to_string()}
-    fn darkslategray2(self) -> String {"".to_string()}
-    fn darkred2(self) -> String {"".to_string()}
-    fn deeppink4b(self) -> String {"".to_string()}
-    fn darkmagenta1(self) -> String {"".to_string()}
-    fn darkmagenta2(self) -> String {"".to_string()}
-    fn darkviolet1a(self) -> String {"".to_string()}
-    fn purple1a(self) -> String {"".to_string()}
-    fn orange4b(self) -> String {"".to_string()}
-    fn lightpink4(self) -> String {"".to_string()}
-    fn plum4(self) -> String {"".to_string()}
-    fn mediumpurple3a(self) -> String {"".to_string()}
-    fn mediumpurple3b(self) -> String {"".to_string()}
-    fn slateblue1(self) -> String {"".to_string()}
-    fn yellow4a(self) -> String {"".to_string()}
-    fn wheat4(self) -> String {"".to_string()}
-    fn grey53(self) -> String {"".to_string()}
-    fn lightslategrey(self) -> String {"".to_string()}
-    fn mediumpurple(self) -> String {"".to_string()}
-    fn lightslateblue(self) -> String {"".to_string()}
-    fn yellow4b(self) -> String {"".to_string()}
-    fn darkolivegreen3a(self) -> String {"".to_string()}
-    fn darkgreensea(self) -> String {"".to_string()}
-    fn lightskyblue3a(self) -> String {"".to_string()}
-    fn lightskyblue3b(self) -> String {"".to_string()}
-    fn skyblue2(self) -> String {"".to_string()}
-    fn chartreuse2b(self) -> String {"".to_string()}
-    fn darkolivegreen3b(self) -> String {"".to_string()}
-    fn palegreen3b(self) -> String {"".to_string()}
-    fn darkseagreen3a(self) -> String {"".to_string()}
-    fn darkslategray3(self) -> String {"".to_string()}
-    fn skyblue1(self) -> String {"".to_string()}
-    fn chartreuse1(self) -> String {"".to_string()}
-    fn lightgreen2(self) -> String {"".to_string()}
-    fn lightgreen3(self) -> String {"".to_string()}
-    fn palegreen1a(self) -> String {"".to_string()}
-    fn aquamarine1b(self) -> String {"".to_string()}
-    fn darkslategray1(self) -> String {"".to_string()}
-    fn red3a(self) -> String {"".to_string()}
-    fn deeppink4c(self) -> String {"".to_string()}
-    fn mediumvioletred(self) -> String {"".to_string()}
-    fn magenta3a(self) -> String {"".to_string()}
-    fn darkviolet1b(self) -> String {"".to_string()}
-    fn purple1b(self) -> String {"".to_string()}
-    fn darkorange3a(self) -> String {"".to_string()}
-    fn indianred1a(self) -> String {"".to_string()}
-    fn hotpink3a(self) -> String {"".to_string()}
-    fn mediumorchid3(self) -> String {"".to_string()}
-    fn mediumorchid(self) -> String {"".to_string()}
-    fn mediumpurple2a(self) -> String {"".to_string()}
-    fn darkgoldenrod(self) -> String {"".to_string()}
-    fn lightsalmon3a(self) -> String {"".to_string()}
-    fn rosybrown(self) -> String {"".to_string()}
-    fn grey63(self) -> String {"".to_string()}
-    fn mediumpurple2b(self) -> String {"".to_string()}
-    fn mediumpurple1(self) -> String {"".to_string()}
-    fn gold3a(self) -> String {"".to_string()}
-    fn darkkhaki(self) -> String {"".to_string()}
-    fn navajowhite3(self) -> String {"".to_string()}
-    fn grey69(self) -> String {"".to_string()}
-    fn lightsteelblue3(self) -> String {"".to_string()}
-    fn lightsteelblue(self) -> String {"".to_string()}
-    fn yellow3a(self) -> String {"".to_string()}
-    fn darkolivegreen3(self) -> String {"".to_string()}
-    fn darkseagreen3b(self) -> String {"".to_string()}
-    fn darkseagreen2(self) -> String {"".to_string()}
-    fn lightcyan3(self) -> String {"".to_string()}
-    fn lightskyblue1(self) -> String {"".to_string()}
-    fn greenyellow(self) -> String {"".to_string()}
-    fn darkolivegreen2(self) -> String {"".to_string()}
-    fn palegreen1b(self) -> String {"".to_string()}
-    fn darkseagreen5b(self) -> String {"".to_string()}
-    fn darkseagreen5a(self) -> String {"".to_string()}
-    fn paleturquoise1(self) -> String {"".to_string()}
-    fn red3b(self) -> String {"".to_string()}
-    fn deeppink3a(self) -> String {"".to_string()}
-    fn deeppink3b(self) -> String {"".to_string()}
-    fn magenta3b(self) -> String {"".to_string()}
-    fn magenta3c(self) -> String {"".to_string()}
-    fn magenta2a(self) -> String {"".to_string()}
-    fn darkorange3b(self) -> String {"".to_string()}
-    fn indianred1b(self) -> String {"".to_string()}
-    fn hotpink3b(self) -> String {"".to_string()}
-    fn hotpink2(self) -> String {"".to_string()}
-    fn orchid(self) -> String {"".to_string()}
-    fn mediumorchid1a(self) -> String {"".to_string()}
-    fn orange3(self) -> String {"".to_string()}
-    fn lightsalmon3b(self) -> String {"".to_string()}
-    fn lightpink3(self) -> String {"".to_string()}
-    fn pink3(self) -> String {"".to_string()}
-    fn plum3(self) -> String {"".to_string()}
-    fn violet(self) -> String {"".to_string()}
-    fn gold3b(self) -> String {"".to_string()}
-    fn lightgoldenrod3(self) -> String {"".to_string()}
-    fn tan(self) -> String {"".to_string()}
-    fn mistyrose3(self) -> String {"".to_string()}
-    fn thistle3(self) -> String {"".to_string()}
-    fn plum2(self) -> String {"".to_string()}
-    fn yellow3b(self) -> String {"".to_string()}
-    fn khaki3(self) -> String {"".to_string()}
-    fn lightgoldenrod2a(self) -> String {"".to_string()}
-    fn lightyellow3(self) -> String {"".to_string()}
-    fn grey84(self) -> String {"".to_string()}
-    fn lightsteelblue1(self) -> String {"".to_string()}
-    fn yellow2(self) -> String {"".to_string()}
-    fn darkolivegreen1a(self) -> String {"".to_string()}
-    fn darkolivegreen1b(self) -> String {"".to_string()}
-    fn darkseagreen1(self) -> String {"".to_string()}
-    fn honeydew2(self) -> String {"".to_string()}
-    fn lightcyan1(self) -> String {"".to_string()}
-    fn red1(self) -> String {"".to_string()}
-    fn deeppink2(self) -> String {"".to_string()}
-    fn deeppink1a(self) -> String {"".to_string()}
-    fn deeppink1b(self) -> String {"".to_string()}
-    fn magenta2b(self) -> String {"".to_string()}
-    fn magenta1(self) -> String {"".to_string()}
-    fn orangered1(self) -> String {"".to_string()}
-    fn indianred1c(self) -> String {"".to_string()}
-    fn indianred1d(self) -> String {"".to_string()}
-    fn hotpink1a(self) -> String {"".to_string()}
-    fn hotpink1b(self) -> String {"".to_string()}
-    fn mediumorchid1b(self) -> String {"".to_string()}
-    fn darkorange(self) -> String {"".to_string()}
-    fn salmon1(self) -> String {"".to_string()}
-    fn lightcoral(self) -> String {"".to_string()}
-    fn palevioletred1(self) -> String {"".to_string()}
-    fn orchid2(self) -> String {"".to_string()}
-    fn orchid1(self) -> String {"".to_string()}
-    fn orange1(self) -> String {"".to_string()}
-    fn sandybrown(self) -> String {"".to_string()}
-    fn lightsalmon1(self) -> String {"".to_string()}
-    fn lightpink1(self) -> String {"".to_string()}
-    fn pink1(self) -> String {"".to_string()}
-    fn plum1(self) -> String {"".to_string()}
-    fn gold1(self) -> String {"".to_string()}
-    fn lightgoldenrod2b(self) -> String {"".to_string()}
-    fn lightgoldenrod2c(self) -> String {"".to_string()}
-    fn navajowhite1(self) -> String {"".to_string()}
-    fn mistyrose1(self) -> String {"".to_string()}
-    fn thistle1(self) -> String {"".to_string()}
-    fn yellow1(self) -> String {"".to_string()}
-    fn lightgoldenrod1(self) -> String {"".to_string()}
-    fn khaki1(self) -> String {"".to_string()}
-    fn wheat1(self) -> String {"".to_string()}
-    fn cornsilk1(self) -> String {"".to_string()}
-    fn grey100(self) -> String {"".to_string()}
-    fn grey3(self) -> String {"".to_string()}
-    fn grey7(self) -> String {"".to_string()}
-    fn grey11(self) -> String {"".to_string()}
-    fn grey15(self) -> String {"".to_string()}
-    fn grey19(self) -> String {"".to_string()}
-    fn grey23(self) -> String {"".to_string()}
-    fn grey27(self) -> String {"".to_string()}
-    fn grey30(self) -> String {"".to_string()}
-    fn grey35(self) -> String {"".to_string()}
-    fn grey39(self) -> String {"".to_string()}
-    fn grey42(self) -> String {"".to_string()}
-    fn grey46(self) -> String {"".to_string()}
-    fn grey50(self) -> String {"".to_string()}
-    fn grey54(self) -> String {"".to_string()}
-    fn grey58(self) -> String {"".to_string()}
-    fn grey62(self) -> String {"".to_string()}
-    fn grey66(self) -> String {"".to_string()}
-    fn grey70(self) -> String {"".to_string()}
-    fn grey74(self) -> String {"".to_string()}
-    fn grey78(self) -> String {"".to_string()}
-    fn grey82(self) -> String {"".to_string()}
-    fn grey85(self) -> String {"".to_string()}
-    fn grey89(self) -> String {"".to_string()}
-    fn grey93(self) -> String {"".to_string()}
+    fn fg_black(self) -> String { EightBitColors::Black.to_fg_color_string() }
+    fn fg_red(self) -> String { EightBitColors::Red.to_fg_color_string() }
+    fn fg_green(self) -> String {EightBitColors::Green.to_fg_color_string()}
+    fn fg_yellow(self) -> String {EightBitColors::Yellow.to_fg_color_string()}
+    fn fg_blue(self) -> String {EightBitColors::Blue.to_fg_color_string()}
+    fn fg_magenta(self) -> String {EightBitColors::Magenta.to_fg_color_string()}
+    fn fg_cyan(self) -> String {EightBitColors::Cyan.to_fg_color_string()}
+    fn fg_lightgray(self) -> String {EightBitColors::LightGray.to_fg_color_string()}
+    fn fg_darkgray(self) -> String {EightBitColors::DarkGray.to_fg_color_string()}
+    fn fg_lightred(self) -> String {EightBitColors::LightRed.to_fg_color_string()}
+    fn fg_lightgreen(self) -> String {EightBitColors::LightGreen.to_fg_color_string()}
+    fn fg_lightyellow(self) -> String {EightBitColors::LightYellow.to_fg_color_string()}
+    fn fg_lightblue(self) -> String {EightBitColors::LightBlue.to_fg_color_string()}
+    fn fg_lightmagenta(self) -> String {EightBitColors::LightMagenta.to_fg_color_string()}
+    fn fg_lightcyan(self) -> String {EightBitColors::LightCyan.to_fg_color_string()}
+    fn fg_white(self) -> String {EightBitColors::White.to_fg_color_string()}
+    fn fg_grey0(self) -> String {EightBitColors::Grey0.to_fg_color_string()}
+    fn fg_navyblue(self) -> String {EightBitColors::NavyBlue.to_fg_color_string()}
+    fn fg_darkblue(self) -> String {EightBitColors::DarkBlue.to_fg_color_string()}
+    fn fg_blue3a(self) -> String {EightBitColors::Blue3a.to_fg_color_string()}
+    fn fg_blue3b(self) -> String {EightBitColors::Blue3b.to_fg_color_string()}
+    fn fg_blue1(self) -> String {EightBitColors::Blue1.to_fg_color_string()}
+    fn fg_darkgreen(self) -> String {EightBitColors::DarkGreen.to_fg_color_string()}
+    fn fg_deepskyblue4a(self) -> String {EightBitColors::DeepSkyBlue4a.to_fg_color_string()}
+    fn fg_deepskyblue4b(self) -> String {EightBitColors::DeepSkyBlue4b.to_fg_color_string()}
+    fn fg_deepskyblue4c(self) -> String {EightBitColors::DeepSkyBlue4c.to_fg_color_string()}
+    fn fg_dodgerblue3(self) -> String {EightBitColors::DodgerBlue3.to_fg_color_string()}
+    fn fg_dodgerblue2(self) -> String {EightBitColors::DodgerBlue2.to_fg_color_string()}
+    fn fg_green4(self) -> String {EightBitColors::Green4.to_fg_color_string()}
+    fn fg_springgreen4(self) -> String {EightBitColors::SpringGreen4.to_fg_color_string()}
+    fn fg_turquoise4(self) -> String {EightBitColors::Turquoise4.to_fg_color_string()}
+    fn fg_deepskyblue3a(self) -> String {EightBitColors::DeepSkyBlue3a.to_fg_color_string()}
+    fn fg_deepskyblue3b(self) -> String {EightBitColors::DeepSkyBlue3b.to_fg_color_string()}
+    fn fg_dodgerblue1(self) -> String {EightBitColors::DodgerBlue1.to_fg_color_string()}
+    fn fg_green3a(self) -> String {EightBitColors::Green3a.to_fg_color_string()}
+    fn fg_springgreen3a(self) -> String {EightBitColors::SpringGreen3a.to_fg_color_string()}
+    fn fg_darkcyan(self) -> String {EightBitColors::DarkCyan.to_fg_color_string()}
+    fn fg_lightseagreen(self) -> String {EightBitColors::LightSeaGreen.to_fg_color_string()}
+    fn fg_deepskyblue2(self) -> String {EightBitColors::DeepSkyBlue2.to_fg_color_string()}
+    fn fg_deepskyblue1(self) -> String {EightBitColors::DeepSkyBlue1.to_fg_color_string()}
+    fn fg_green3b(self) -> String {EightBitColors::Green3b.to_fg_color_string()}
+    fn fg_springgreen3b(self) -> String {EightBitColors::SpringGreen3b.to_fg_color_string()}
+    fn fg_springgreen2a(self) -> String {EightBitColors::SpringGreen2a.to_fg_color_string()}
+    fn fg_cyan3(self) -> String {EightBitColors::Cyan3.to_fg_color_string()}
+    fn fg_darkturquoise(self) -> String {EightBitColors::DarkTurquoise.to_fg_color_string()}
+    fn fg_turquoise2(self) -> String {EightBitColors::Turquoise2.to_fg_color_string()}
+    fn fg_green1(self) -> String {EightBitColors::Green1.to_fg_color_string()}
+    fn fg_springgreen2b(self) -> String {EightBitColors::SpringGreen2b.to_fg_color_string()}
+    fn fg_springgreen1(self) -> String {EightBitColors::SpringGreen1.to_fg_color_string()}
+    fn fg_mediumspringgreen(self) -> String {EightBitColors::MediumSpringGreen.to_fg_color_string()}
+    fn fg_cyan2(self) -> String {EightBitColors::Cyan2.to_fg_color_string()}
+    fn fg_cyan1(self) -> String {EightBitColors::Cyan1.to_fg_color_string()}
+    fn fg_darkred1(self) -> String {EightBitColors::DarkRed1.to_fg_color_string()}
+    fn fg_deeppink4a(self) -> String {EightBitColors::DeepPink4a.to_fg_color_string()}
+    fn fg_purple4a(self) -> String {EightBitColors::Purple4a.to_fg_color_string()}
+    fn fg_purple4b(self) -> String {EightBitColors::Purple4b.to_fg_color_string()}
+    fn fg_purple3(self) -> String {EightBitColors::Purple3.to_fg_color_string()}
+    fn fg_blueviolet(self) -> String {EightBitColors::BlueViolet.to_fg_color_string()}
+    fn fg_orange4a(self) -> String {EightBitColors::Orange4a.to_fg_color_string()}
+    fn fg_grey37(self) -> String {EightBitColors::Grey37.to_fg_color_string()}
+    fn fg_mediumpurple4(self) -> String {EightBitColors::MediumPurple4.to_fg_color_string()}
+    fn fg_slateblue3a(self) -> String {EightBitColors::SlateBlue3a.to_fg_color_string()}
+    fn fg_slateblue3b(self) -> String {EightBitColors::SlateBlue3b.to_fg_color_string()}
+    fn fg_royalblue1(self) -> String {EightBitColors::RoyalBlue1.to_fg_color_string()}
+    fn fg_chartreuse4(self) -> String {EightBitColors::Chartreuse4.to_fg_color_string()}
+    fn fg_darkseagreen4a(self) -> String {EightBitColors::DarkSeaGreen4a.to_fg_color_string()}
+    fn fg_paleturquoise4(self) -> String {EightBitColors::PaleTurquoise4.to_fg_color_string()}
+    fn fg_steelblue(self) -> String {EightBitColors::SteelBlue.to_fg_color_string()}
+    fn fg_steelblue3(self) -> String {EightBitColors::SteelBlue3.to_fg_color_string()}
+    fn fg_cornflowerblue(self) -> String {EightBitColors::CornflowerBlue.to_fg_color_string()}
+    fn fg_chartreuse3a(self) -> String {EightBitColors::Chartreuse3a.to_fg_color_string()}
+    fn fg_darkseagreen4b(self) -> String {EightBitColors::DarkSeaGreen4b.to_fg_color_string()}
+    fn fg_cadetblue2(self) -> String {EightBitColors::CadetBlue2.to_fg_color_string()}
+    fn fg_cadetblue1(self) -> String {EightBitColors::CadetBlue1.to_fg_color_string()}
+    fn fg_skyblue3(self) -> String {EightBitColors::SkyBlue3.to_fg_color_string()}
+    fn fg_steelblue1a(self) -> String {EightBitColors::SteelBlue1a.to_fg_color_string()}
+    fn fg_chartreuse3b(self) -> String {EightBitColors::Chartreuse3b.to_fg_color_string()}
+    fn fg_palegreen3a(self) -> String {EightBitColors::PaleGreen3a.to_fg_color_string()}
+    fn fg_seagreen3(self) -> String {EightBitColors::SeaGreen3.to_fg_color_string()}
+    fn fg_aquamarine3(self) -> String {EightBitColors::Aquamarine3.to_fg_color_string()}
+    fn fg_mediumturquoise(self) -> String {EightBitColors::MediumTurquoise.to_fg_color_string()}
+    fn fg_steelblue1b(self) -> String {EightBitColors::SteelBlue1b.to_fg_color_string()}
+    fn fg_chartreuse2a(self) -> String {EightBitColors::Chartreuse2a.to_fg_color_string()}
+    fn fg_seagreen2(self) -> String {EightBitColors::SeaGreen2.to_fg_color_string()}
+    fn fg_seagreen1a(self) -> String {EightBitColors::SeaGreen1a.to_fg_color_string()}
+    fn fg_seagreen1b(self) -> String {EightBitColors::SeaGreen1b.to_fg_color_string()}
+    fn fg_aquamarine1a(self) -> String {EightBitColors::Aquamarine1a.to_fg_color_string()}
+    fn fg_darkslategray2(self) -> String {EightBitColors::DarkSlateGray2.to_fg_color_string()}
+    fn fg_darkred2(self) -> String {EightBitColors::DarkRed2.to_fg_color_string()}
+    fn fg_deeppink4b(self) -> String {EightBitColors::DeepPink4b.to_fg_color_string()}
+    fn fg_darkmagenta1(self) -> String {EightBitColors::DarkMagenta1.to_fg_color_string()}
+    fn fg_darkmagenta2(self) -> String {EightBitColors::DarkMagenta2.to_fg_color_string()}
+    fn fg_darkviolet1a(self) -> String {EightBitColors::DarkViolet1a.to_fg_color_string()}
+    fn fg_purple1a(self) -> String {EightBitColors::Purple1a.to_fg_color_string()}
+    fn fg_orange4b(self) -> String {EightBitColors::Orange4b.to_fg_color_string()}
+    fn fg_lightpink4(self) -> String {EightBitColors::LightPink4.to_fg_color_string()}
+    fn fg_plum4(self) -> String {EightBitColors::Plum4.to_fg_color_string()}
+    fn fg_mediumpurple3a(self) -> String {EightBitColors::MediumPurple3a.to_fg_color_string()}
+    fn fg_mediumpurple3b(self) -> String {EightBitColors::MediumPurple3b.to_fg_color_string()}
+    fn fg_slateblue1(self) -> String {EightBitColors::SlateBlue1.to_fg_color_string()}
+    fn fg_yellow4a(self) -> String {EightBitColors::Yellow4a.to_fg_color_string()}
+    fn fg_wheat4(self) -> String {EightBitColors::Wheat4.to_fg_color_string()}
+    fn fg_grey53(self) -> String {EightBitColors::Grey53.to_fg_color_string()}
+    fn fg_lightslategrey(self) -> String {EightBitColors::LightSlateGrey.to_fg_color_string()}
+    fn fg_mediumpurple(self) -> String {EightBitColors::MediumPurple.to_fg_color_string()}
+    fn fg_lightslateblue(self) -> String {EightBitColors::LightSlateBlue.to_fg_color_string()}
+    fn fg_yellow4b(self) -> String {EightBitColors::Yellow4b.to_fg_color_string()}
+    fn fg_darkolivegreen3a(self) -> String {EightBitColors::DarkOliveGreen3a.to_fg_color_string()}
+    fn fg_darkgreensea(self) -> String {EightBitColors::DarkGreenSea.to_fg_color_string()}
+    fn fg_lightskyblue3a(self) -> String {EightBitColors::LightSkyBlue3a.to_fg_color_string()}
+    fn fg_lightskyblue3b(self) -> String {EightBitColors::LightSkyBlue3b.to_fg_color_string()}
+    fn fg_skyblue2(self) -> String {EightBitColors::SkyBlue2.to_fg_color_string()}
+    fn fg_chartreuse2b(self) -> String {EightBitColors::Chartreuse2b.to_fg_color_string()}
+    fn fg_darkolivegreen3b(self) -> String {EightBitColors::DarkOliveGreen3b.to_fg_color_string()}
+    fn fg_palegreen3b(self) -> String {EightBitColors::PaleGreen3b.to_fg_color_string()}
+    fn fg_darkseagreen3a(self) -> String {EightBitColors::DarkSeaGreen3a.to_fg_color_string()}
+    fn fg_darkslategray3(self) -> String {EightBitColors::DarkSlateGray3.to_fg_color_string()}
+    fn fg_skyblue1(self) -> String {EightBitColors::SkyBlue1.to_fg_color_string()}
+    fn fg_chartreuse1(self) -> String {EightBitColors::Chartreuse1.to_fg_color_string()}
+    fn fg_lightgreen2(self) -> String {EightBitColors::LightGreen2.to_fg_color_string()}
+    fn fg_lightgreen3(self) -> String {EightBitColors::LightGreen3.to_fg_color_string()}
+    fn fg_palegreen1a(self) -> String {EightBitColors::PaleGreen1a.to_fg_color_string()}
+    fn fg_aquamarine1b(self) -> String {EightBitColors::Aquamarine1b.to_fg_color_string()}
+    fn fg_darkslategray1(self) -> String {EightBitColors::DarkSlateGray1.to_fg_color_string()}
+    fn fg_red3a(self) -> String {EightBitColors::Red3a.to_fg_color_string()}
+    fn fg_deeppink4c(self) -> String {EightBitColors::DeepPink4c.to_fg_color_string()}
+    fn fg_mediumvioletred(self) -> String {EightBitColors::MediumVioletRed.to_fg_color_string()}
+    fn fg_magenta3a(self) -> String {EightBitColors::Magenta3a.to_fg_color_string()}
+    fn fg_darkviolet1b(self) -> String {EightBitColors::DarkViolet1b.to_fg_color_string()}
+    fn fg_purple1b(self) -> String {EightBitColors::Purple1b.to_fg_color_string()}
+    fn fg_darkorange3a(self) -> String {EightBitColors::DarkOrange3a.to_fg_color_string()}
+    fn fg_indianred1a(self) -> String {EightBitColors::IndianRed1a.to_fg_color_string()}
+    fn fg_hotpink3a(self) -> String {EightBitColors::HotPink3a.to_fg_color_string()}
+    fn fg_mediumorchid3(self) -> String {EightBitColors::MediumOrchid3.to_fg_color_string()}
+    fn fg_mediumorchid(self) -> String {EightBitColors::MediumOrchid.to_fg_color_string()}
+    fn fg_mediumpurple2a(self) -> String {EightBitColors::MediumPurple2a.to_fg_color_string()}
+    fn fg_darkgoldenrod(self) -> String {EightBitColors::DarkGoldenrod.to_fg_color_string()}
+    fn fg_lightsalmon3a(self) -> String {EightBitColors::LightSalmon3a.to_fg_color_string()}
+    fn fg_rosybrown(self) -> String {EightBitColors::RosyBrown.to_fg_color_string()}
+    fn fg_grey63(self) -> String {EightBitColors::Grey63.to_fg_color_string()}
+    fn fg_mediumpurple2b(self) -> String {EightBitColors::MediumPurple2b.to_fg_color_string()}
+    fn fg_mediumpurple1(self) -> String {EightBitColors::MediumPurple1.to_fg_color_string()}
+    fn fg_gold3a(self) -> String {EightBitColors::Gold3a.to_fg_color_string()}
+    fn fg_darkkhaki(self) -> String {EightBitColors::DarkKhaki.to_fg_color_string()}
+    fn fg_navajowhite3(self) -> String {EightBitColors::NavajoWhite3.to_fg_color_string()}
+    fn fg_grey69(self) -> String {EightBitColors::Grey69.to_fg_color_string()}
+    fn fg_lightsteelblue3(self) -> String {EightBitColors::LightSteelBlue3.to_fg_color_string()}
+    fn fg_lightsteelblue(self) -> String {EightBitColors::LightSteelBlue.to_fg_color_string()}
+    fn fg_yellow3a(self) -> String {EightBitColors::Yellow3a.to_fg_color_string()}
+    fn fg_darkolivegreen3(self) -> String {EightBitColors::DarkOliveGreen3.to_fg_color_string()}
+    fn fg_darkseagreen3b(self) -> String {EightBitColors::DarkSeaGreen3b.to_fg_color_string()}
+    fn fg_darkseagreen2(self) -> String {EightBitColors::DarkSeaGreen2.to_fg_color_string()}
+    fn fg_lightcyan3(self) -> String {EightBitColors::LightCyan3.to_fg_color_string()}
+    fn fg_lightskyblue1(self) -> String {EightBitColors::LightSkyBlue1.to_fg_color_string()}
+    fn fg_greenyellow(self) -> String {EightBitColors::GreenYellow.to_fg_color_string()}
+    fn fg_darkolivegreen2(self) -> String {EightBitColors::DarkOliveGreen2.to_fg_color_string()}
+    fn fg_palegreen1b(self) -> String {EightBitColors::PaleGreen1b.to_fg_color_string()}
+    fn fg_darkseagreen5b(self) -> String {EightBitColors::DarkSeaGreen5b.to_fg_color_string()}
+    fn fg_darkseagreen5a(self) -> String {EightBitColors::DarkSeaGreen5a.to_fg_color_string()}
+    fn fg_paleturquoise1(self) -> String {EightBitColors::PaleTurquoise1.to_fg_color_string()}
+    fn fg_red3b(self) -> String {EightBitColors::Red3b.to_fg_color_string()}
+    fn fg_deeppink3a(self) -> String {EightBitColors::DeepPink3a.to_fg_color_string()}
+    fn fg_deeppink3b(self) -> String {EightBitColors::DeepPink3b.to_fg_color_string()}
+    fn fg_magenta3b(self) -> String {EightBitColors::Magenta3b.to_fg_color_string()}
+    fn fg_magenta3c(self) -> String {EightBitColors::Magenta3c.to_fg_color_string()}
+    fn fg_magenta2a(self) -> String {EightBitColors::Magenta2a.to_fg_color_string()}
+    fn fg_darkorange3b(self) -> String {EightBitColors::DarkOrange3b.to_fg_color_string()}
+    fn fg_indianred1b(self) -> String {EightBitColors::IndianRed1b.to_fg_color_string()}
+    fn fg_hotpink3b(self) -> String {EightBitColors::HotPink3b.to_fg_color_string()}
+    fn fg_hotpink2(self) -> String {EightBitColors::HotPink2.to_fg_color_string()}
+    fn fg_orchid(self) -> String {EightBitColors::Orchid.to_fg_color_string()}
+    fn fg_mediumorchid1a(self) -> String {EightBitColors::MediumOrchid1a.to_fg_color_string()}
+    fn fg_orange3(self) -> String {EightBitColors::Orange3.to_fg_color_string()}
+    fn fg_lightsalmon3b(self) -> String {EightBitColors::LightSalmon3b.to_fg_color_string()}
+    fn fg_lightpink3(self) -> String {EightBitColors::LightPink3.to_fg_color_string()}
+    fn fg_pink3(self) -> String {EightBitColors::Pink3.to_fg_color_string()}
+    fn fg_plum3(self) -> String {EightBitColors::Plum3.to_fg_color_string()}
+    fn fg_violet(self) -> String {EightBitColors::Violet.to_fg_color_string()}
+    fn fg_gold3b(self) -> String {EightBitColors::Gold3b.to_fg_color_string()}
+    fn fg_lightgoldenrod3(self) -> String {EightBitColors::LightGoldenrod3.to_fg_color_string()}
+    fn fg_tan(self) -> String {EightBitColors::Tan.to_fg_color_string()}
+    fn fg_mistyrose3(self) -> String {EightBitColors::MistyRose3.to_fg_color_string()}
+    fn fg_thistle3(self) -> String {EightBitColors::Thistle3.to_fg_color_string()}
+    fn fg_plum2(self) -> String {EightBitColors::Plum2.to_fg_color_string()}
+    fn fg_yellow3b(self) -> String {EightBitColors::Yellow3b.to_fg_color_string()}
+    fn fg_khaki3(self) -> String {EightBitColors::Khaki3.to_fg_color_string()}
+    fn fg_lightgoldenrod2a(self) -> String {EightBitColors::LightGoldenrod2a.to_fg_color_string()}
+    fn fg_lightyellow3(self) -> String {EightBitColors::LightYellow3.to_fg_color_string()}
+    fn fg_grey84(self) -> String {EightBitColors::Grey84.to_fg_color_string()}
+    fn fg_lightsteelblue1(self) -> String {EightBitColors::LightSteelBlue1.to_fg_color_string()}
+    fn fg_yellow2(self) -> String {EightBitColors::Yellow2.to_fg_color_string()}
+    fn fg_darkolivegreen1a(self) -> String {EightBitColors::DarkOliveGreen1a.to_fg_color_string()}
+    fn fg_darkolivegreen1b(self) -> String {EightBitColors::DarkOliveGreen1b.to_fg_color_string()}
+    fn fg_darkseagreen1(self) -> String {EightBitColors::DarkSeaGreen1.to_fg_color_string()}
+    fn fg_honeydew2(self) -> String {EightBitColors::Honeydew2.to_fg_color_string()}
+    fn fg_lightcyan1(self) -> String {EightBitColors::LightCyan1.to_fg_color_string()}
+    fn fg_red1(self) -> String {EightBitColors::Red1.to_fg_color_string()}
+    fn fg_deeppink2(self) -> String {EightBitColors::DeepPink2.to_fg_color_string()}
+    fn fg_deeppink1a(self) -> String {EightBitColors::DeepPink1a.to_fg_color_string()}
+    fn fg_deeppink1b(self) -> String {EightBitColors::DeepPink1b.to_fg_color_string()}
+    fn fg_magenta2b(self) -> String {EightBitColors::Magenta2b.to_fg_color_string()}
+    fn fg_magenta1(self) -> String {EightBitColors::Magenta1.to_fg_color_string()}
+    fn fg_orangered1(self) -> String {EightBitColors::OrangeRed1.to_fg_color_string()}
+    fn fg_indianred1c(self) -> String {EightBitColors::IndianRed1c.to_fg_color_string()}
+    fn fg_indianred1d(self) -> String {EightBitColors::IndianRed1d.to_fg_color_string()}
+    fn fg_hotpink1a(self) -> String {EightBitColors::HotPink1a.to_fg_color_string()}
+    fn fg_hotpink1b(self) -> String {EightBitColors::HotPink1b.to_fg_color_string()}
+    fn fg_mediumorchid1b(self) -> String {EightBitColors::MediumOrchid1b.to_fg_color_string()}
+    fn fg_darkorange(self) -> String {EightBitColors::DarkOrange.to_fg_color_string()}
+    fn fg_salmon1(self) -> String {EightBitColors::Salmon1.to_fg_color_string()}
+    fn fg_lightcoral(self) -> String {EightBitColors::LightCoral.to_fg_color_string()}
+    fn fg_palevioletred1(self) -> String {EightBitColors::PaleVioletRed1.to_fg_color_string()}
+    fn fg_orchid2(self) -> String {EightBitColors::Orchid2.to_fg_color_string()}
+    fn fg_orchid1(self) -> String {EightBitColors::Orchid1.to_fg_color_string()}
+    fn fg_orange1(self) -> String {EightBitColors::Orange1.to_fg_color_string()}
+    fn fg_sandybrown(self) -> String {EightBitColors::SandyBrown.to_fg_color_string()}
+    fn fg_lightsalmon1(self) -> String {EightBitColors::LightSalmon1.to_fg_color_string()}
+    fn fg_lightpink1(self) -> String {EightBitColors::LightPink1.to_fg_color_string()}
+    fn fg_pink1(self) -> String {EightBitColors::Pink1.to_fg_color_string()}
+    fn fg_plum1(self) -> String {EightBitColors::Plum1.to_fg_color_string()}
+    fn fg_gold1(self) -> String {EightBitColors::Gold1.to_fg_color_string()}
+    fn fg_lightgoldenrod2b(self) -> String {EightBitColors::LightGoldenrod2b.to_fg_color_string()}
+    fn fg_lightgoldenrod2c(self) -> String {EightBitColors::LightGoldenrod2c.to_fg_color_string()}
+    fn fg_navajowhite1(self) -> String {EightBitColors::NavajoWhite1.to_fg_color_string()}
+    fn fg_mistyrose1(self) -> String {EightBitColors::MistyRose1.to_fg_color_string()}
+    fn fg_thistle1(self) -> String {EightBitColors::Thistle1.to_fg_color_string()}
+    fn fg_yellow1(self) -> String {EightBitColors::Yellow1.to_fg_color_string()}
+    fn fg_lightgoldenrod1(self) -> String {EightBitColors::LightGoldenrod1.to_fg_color_string()}
+    fn fg_khaki1(self) -> String {EightBitColors::Khaki1.to_fg_color_string()}
+    fn fg_wheat1(self) -> String {EightBitColors::Wheat1.to_fg_color_string()}
+    fn fg_cornsilk1(self) -> String {EightBitColors::CornSilk1.to_fg_color_string()}
+    fn fg_grey100(self) -> String {EightBitColors::Grey100.to_fg_color_string()}
+    fn fg_grey3(self) -> String {EightBitColors::Grey3.to_fg_color_string()}
+    fn fg_grey7(self) -> String {EightBitColors::Grey7.to_fg_color_string()}
+    fn fg_grey11(self) -> String {EightBitColors::Grey11.to_fg_color_string()}
+    fn fg_grey15(self) -> String {EightBitColors::Grey15.to_fg_color_string()}
+    fn fg_grey19(self) -> String {EightBitColors::Grey19.to_fg_color_string()}
+    fn fg_grey23(self) -> String {EightBitColors::Grey23.to_fg_color_string()}
+    fn fg_grey27(self) -> String {EightBitColors::Grey27.to_fg_color_string()}
+    fn fg_grey30(self) -> String {EightBitColors::Grey30.to_fg_color_string()}
+    fn fg_grey35(self) -> String {EightBitColors::Grey35.to_fg_color_string()}
+    fn fg_grey39(self) -> String {EightBitColors::Grey39.to_fg_color_string()}
+    fn fg_grey42(self) -> String {EightBitColors::Grey42.to_fg_color_string()}
+    fn fg_grey46(self) -> String {EightBitColors::Grey46.to_fg_color_string()}
+    fn fg_grey50(self) -> String {EightBitColors::Grey50.to_fg_color_string()}
+    fn fg_grey54(self) -> String {EightBitColors::Grey54.to_fg_color_string()}
+    fn fg_grey58(self) -> String {EightBitColors::Grey58.to_fg_color_string()}
+    fn fg_grey62(self) -> String {EightBitColors::Grey62.to_fg_color_string()}
+    fn fg_grey66(self) -> String {EightBitColors::Grey66.to_fg_color_string()}
+    fn fg_grey70(self) -> String {EightBitColors::Grey70.to_fg_color_string()}
+    fn fg_grey74(self) -> String {EightBitColors::Grey74.to_fg_color_string()}
+    fn fg_grey78(self) -> String {EightBitColors::Grey78.to_fg_color_string()}
+    fn fg_grey82(self) -> String {EightBitColors::Grey82.to_fg_color_string()}
+    fn fg_grey85(self) -> String {EightBitColors::Grey85.to_fg_color_string()}
+    fn fg_grey89(self) -> String {EightBitColors::Grey89.to_fg_color_string()}
+    fn fg_grey93(self) -> String {EightBitColors::Grey93.to_fg_color_string()}
+
+    fn bg_black(self) -> String { EightBitColors::Black.to_bg_color_string() }
+    fn bg_red(self) -> String { EightBitColors::Red.to_bg_color_string() }
+    fn bg_green(self) -> String {EightBitColors::Green.to_bg_color_string()}
+    fn bg_yellow(self) -> String {EightBitColors::Yellow.to_bg_color_string()}
+    fn bg_blue(self) -> String {EightBitColors::Blue.to_bg_color_string()}
+    fn bg_magenta(self) -> String {EightBitColors::Magenta.to_bg_color_string()}
+    fn bg_cyan(self) -> String {EightBitColors::Cyan.to_bg_color_string()}
+    fn bg_lightgray(self) -> String {EightBitColors::LightGray.to_bg_color_string()}
+    fn bg_darkgray(self) -> String {EightBitColors::DarkGray.to_bg_color_string()}
+    fn bg_lightred(self) -> String {EightBitColors::LightRed.to_bg_color_string()}
+    fn bg_lightgreen(self) -> String {EightBitColors::LightGreen.to_bg_color_string()}
+    fn bg_lightyellow(self) -> String {EightBitColors::LightYellow.to_bg_color_string()}
+    fn bg_lightblue(self) -> String {EightBitColors::LightBlue.to_bg_color_string()}
+    fn bg_lightmagenta(self) -> String {EightBitColors::LightMagenta.to_bg_color_string()}
+    fn bg_lightcyan(self) -> String {EightBitColors::LightCyan.to_bg_color_string()}
+    fn bg_white(self) -> String {EightBitColors::White.to_bg_color_string()}
+    fn bg_grey0(self) -> String {EightBitColors::Grey0.to_bg_color_string()}
+    fn bg_navyblue(self) -> String {EightBitColors::NavyBlue.to_bg_color_string()}
+    fn bg_darkblue(self) -> String {EightBitColors::DarkBlue.to_bg_color_string()}
+    fn bg_blue3a(self) -> String {EightBitColors::Blue3a.to_bg_color_string()}
+    fn bg_blue3b(self) -> String {EightBitColors::Blue3b.to_bg_color_string()}
+    fn bg_blue1(self) -> String {EightBitColors::Blue1.to_bg_color_string()}
+    fn bg_darkgreen(self) -> String {EightBitColors::DarkGreen.to_bg_color_string()}
+    fn bg_deepskyblue4a(self) -> String {EightBitColors::DeepSkyBlue4a.to_bg_color_string()}
+    fn bg_deepskyblue4b(self) -> String {EightBitColors::DeepSkyBlue4b.to_bg_color_string()}
+    fn bg_deepskyblue4c(self) -> String {EightBitColors::DeepSkyBlue4c.to_bg_color_string()}
+    fn bg_dodgerblue3(self) -> String {EightBitColors::DodgerBlue3.to_bg_color_string()}
+    fn bg_dodgerblue2(self) -> String {EightBitColors::DodgerBlue2.to_bg_color_string()}
+    fn bg_green4(self) -> String {EightBitColors::Green4.to_bg_color_string()}
+    fn bg_springgreen4(self) -> String {EightBitColors::SpringGreen4.to_bg_color_string()}
+    fn bg_turquoise4(self) -> String {EightBitColors::Turquoise4.to_bg_color_string()}
+    fn bg_deepskyblue3a(self) -> String {EightBitColors::DeepSkyBlue3a.to_bg_color_string()}
+    fn bg_deepskyblue3b(self) -> String {EightBitColors::DeepSkyBlue3b.to_bg_color_string()}
+    fn bg_dodgerblue1(self) -> String {EightBitColors::DodgerBlue1.to_bg_color_string()}
+    fn bg_green3a(self) -> String {EightBitColors::Green3a.to_bg_color_string()}
+    fn bg_springgreen3a(self) -> String {EightBitColors::SpringGreen3a.to_bg_color_string()}
+    fn bg_darkcyan(self) -> String {EightBitColors::DarkCyan.to_bg_color_string()}
+    fn bg_lightseagreen(self) -> String {EightBitColors::LightSeaGreen.to_bg_color_string()}
+    fn bg_deepskyblue2(self) -> String {EightBitColors::DeepSkyBlue2.to_bg_color_string()}
+    fn bg_deepskyblue1(self) -> String {EightBitColors::DeepSkyBlue1.to_bg_color_string()}
+    fn bg_green3b(self) -> String {EightBitColors::Green3b.to_bg_color_string()}
+    fn bg_springgreen3b(self) -> String {EightBitColors::SpringGreen3b.to_bg_color_string()}
+    fn bg_springgreen2a(self) -> String {EightBitColors::SpringGreen2a.to_bg_color_string()}
+    fn bg_cyan3(self) -> String {EightBitColors::Cyan3.to_bg_color_string()}
+    fn bg_darkturquoise(self) -> String {EightBitColors::DarkTurquoise.to_bg_color_string()}
+    fn bg_turquoise2(self) -> String {EightBitColors::Turquoise2.to_bg_color_string()}
+    fn bg_green1(self) -> String {EightBitColors::Green1.to_bg_color_string()}
+    fn bg_springgreen2b(self) -> String {EightBitColors::SpringGreen2b.to_bg_color_string()}
+    fn bg_springgreen1(self) -> String {EightBitColors::SpringGreen1.to_bg_color_string()}
+    fn bg_mediumspringgreen(self) -> String {EightBitColors::MediumSpringGreen.to_bg_color_string()}
+    fn bg_cyan2(self) -> String {EightBitColors::Cyan2.to_bg_color_string()}
+    fn bg_cyan1(self) -> String {EightBitColors::Cyan1.to_bg_color_string()}
+    fn bg_darkred1(self) -> String {EightBitColors::DarkRed1.to_bg_color_string()}
+    fn bg_deeppink4a(self) -> String {EightBitColors::DeepPink4a.to_bg_color_string()}
+    fn bg_purple4a(self) -> String {EightBitColors::Purple4a.to_bg_color_string()}
+    fn bg_purple4b(self) -> String {EightBitColors::Purple4b.to_bg_color_string()}
+    fn bg_purple3(self) -> String {EightBitColors::Purple3.to_bg_color_string()}
+    fn bg_blueviolet(self) -> String {EightBitColors::BlueViolet.to_bg_color_string()}
+    fn bg_orange4a(self) -> String {EightBitColors::Orange4a.to_bg_color_string()}
+    fn bg_grey37(self) -> String {EightBitColors::Grey37.to_bg_color_string()}
+    fn bg_mediumpurple4(self) -> String {EightBitColors::MediumPurple4.to_bg_color_string()}
+    fn bg_slateblue3a(self) -> String {EightBitColors::SlateBlue3a.to_bg_color_string()}
+    fn bg_slateblue3b(self) -> String {EightBitColors::SlateBlue3b.to_bg_color_string()}
+    fn bg_royalblue1(self) -> String {EightBitColors::RoyalBlue1.to_bg_color_string()}
+    fn bg_chartreuse4(self) -> String {EightBitColors::Chartreuse4.to_bg_color_string()}
+    fn bg_darkseagreen4a(self) -> String {EightBitColors::DarkSeaGreen4a.to_bg_color_string()}
+    fn bg_paleturquoise4(self) -> String {EightBitColors::PaleTurquoise4.to_bg_color_string()}
+    fn bg_steelblue(self) -> String {EightBitColors::SteelBlue.to_bg_color_string()}
+    fn bg_steelblue3(self) -> String {EightBitColors::SteelBlue3.to_bg_color_string()}
+    fn bg_cornflowerblue(self) -> String {EightBitColors::CornflowerBlue.to_bg_color_string()}
+    fn bg_chartreuse3a(self) -> String {EightBitColors::Chartreuse3a.to_bg_color_string()}
+    fn bg_darkseagreen4b(self) -> String {EightBitColors::DarkSeaGreen4b.to_bg_color_string()}
+    fn bg_cadetblue2(self) -> String {EightBitColors::CadetBlue2.to_bg_color_string()}
+    fn bg_cadetblue1(self) -> String {EightBitColors::CadetBlue1.to_bg_color_string()}
+    fn bg_skyblue3(self) -> String {EightBitColors::SkyBlue3.to_bg_color_string()}
+    fn bg_steelblue1a(self) -> String {EightBitColors::SteelBlue1a.to_bg_color_string()}
+    fn bg_chartreuse3b(self) -> String {EightBitColors::Chartreuse3b.to_bg_color_string()}
+    fn bg_palegreen3a(self) -> String {EightBitColors::PaleGreen3a.to_bg_color_string()}
+    fn bg_seagreen3(self) -> String {EightBitColors::SeaGreen3.to_bg_color_string()}
+    fn bg_aquamarine3(self) -> String {EightBitColors::Aquamarine3.to_bg_color_string()}
+    fn bg_mediumturquoise(self) -> String {EightBitColors::MediumTurquoise.to_bg_color_string()}
+    fn bg_steelblue1b(self) -> String {EightBitColors::SteelBlue1b.to_bg_color_string()}
+    fn bg_chartreuse2a(self) -> String {EightBitColors::Chartreuse2a.to_bg_color_string()}
+    fn bg_seagreen2(self) -> String {EightBitColors::SeaGreen2.to_bg_color_string()}
+    fn bg_seagreen1a(self) -> String {EightBitColors::SeaGreen1a.to_bg_color_string()}
+    fn bg_seagreen1b(self) -> String {EightBitColors::SeaGreen1b.to_bg_color_string()}
+    fn bg_aquamarine1a(self) -> String {EightBitColors::Aquamarine1a.to_bg_color_string()}
+    fn bg_darkslategray2(self) -> String {EightBitColors::DarkSlateGray2.to_bg_color_string()}
+    fn bg_darkred2(self) -> String {EightBitColors::DarkRed2.to_bg_color_string()}
+    fn bg_deeppink4b(self) -> String {EightBitColors::DeepPink4b.to_bg_color_string()}
+    fn bg_darkmagenta1(self) -> String {EightBitColors::DarkMagenta1.to_bg_color_string()}
+    fn bg_darkmagenta2(self) -> String {EightBitColors::DarkMagenta2.to_bg_color_string()}
+    fn bg_darkviolet1a(self) -> String {EightBitColors::DarkViolet1a.to_bg_color_string()}
+    fn bg_purple1a(self) -> String {EightBitColors::Purple1a.to_bg_color_string()}
+    fn bg_orange4b(self) -> String {EightBitColors::Orange4b.to_bg_color_string()}
+    fn bg_lightpink4(self) -> String {EightBitColors::LightPink4.to_bg_color_string()}
+    fn bg_plum4(self) -> String {EightBitColors::Plum4.to_bg_color_string()}
+    fn bg_mediumpurple3a(self) -> String {EightBitColors::MediumPurple3a.to_bg_color_string()}
+    fn bg_mediumpurple3b(self) -> String {EightBitColors::MediumPurple3b.to_bg_color_string()}
+    fn bg_slateblue1(self) -> String {EightBitColors::SlateBlue1.to_bg_color_string()}
+    fn bg_yellow4a(self) -> String {EightBitColors::Yellow4a.to_bg_color_string()}
+    fn bg_wheat4(self) -> String {EightBitColors::Wheat4.to_bg_color_string()}
+    fn bg_grey53(self) -> String {EightBitColors::Grey53.to_bg_color_string()}
+    fn bg_lightslategrey(self) -> String {EightBitColors::LightSlateGrey.to_bg_color_string()}
+    fn bg_mediumpurple(self) -> String {EightBitColors::MediumPurple.to_bg_color_string()}
+    fn bg_lightslateblue(self) -> String {EightBitColors::LightSlateBlue.to_bg_color_string()}
+    fn bg_yellow4b(self) -> String {EightBitColors::Yellow4b.to_bg_color_string()}
+    fn bg_darkolivegreen3a(self) -> String {EightBitColors::DarkOliveGreen3a.to_bg_color_string()}
+    fn bg_darkgreensea(self) -> String {EightBitColors::DarkGreenSea.to_bg_color_string()}
+    fn bg_lightskyblue3a(self) -> String {EightBitColors::LightSkyBlue3a.to_bg_color_string()}
+    fn bg_lightskyblue3b(self) -> String {EightBitColors::LightSkyBlue3b.to_bg_color_string()}
+    fn bg_skyblue2(self) -> String {EightBitColors::SkyBlue2.to_bg_color_string()}
+    fn bg_chartreuse2b(self) -> String {EightBitColors::Chartreuse2b.to_bg_color_string()}
+    fn bg_darkolivegreen3b(self) -> String {EightBitColors::DarkOliveGreen3b.to_bg_color_string()}
+    fn bg_palegreen3b(self) -> String {EightBitColors::PaleGreen3b.to_bg_color_string()}
+    fn bg_darkseagreen3a(self) -> String {EightBitColors::DarkSeaGreen3a.to_bg_color_string()}
+    fn bg_darkslategray3(self) -> String {EightBitColors::DarkSlateGray3.to_bg_color_string()}
+    fn bg_skyblue1(self) -> String {EightBitColors::SkyBlue1.to_bg_color_string()}
+    fn bg_chartreuse1(self) -> String {EightBitColors::Chartreuse1.to_bg_color_string()}
+    fn bg_lightgreen2(self) -> String {EightBitColors::LightGreen2.to_bg_color_string()}
+    fn bg_lightgreen3(self) -> String {EightBitColors::LightGreen3.to_bg_color_string()}
+    fn bg_palegreen1a(self) -> String {EightBitColors::PaleGreen1a.to_bg_color_string()}
+    fn bg_aquamarine1b(self) -> String {EightBitColors::Aquamarine1b.to_bg_color_string()}
+    fn bg_darkslategray1(self) -> String {EightBitColors::DarkSlateGray1.to_bg_color_string()}
+    fn bg_red3a(self) -> String {EightBitColors::Red3a.to_bg_color_string()}
+    fn bg_deeppink4c(self) -> String {EightBitColors::DeepPink4c.to_bg_color_string()}
+    fn bg_mediumvioletred(self) -> String {EightBitColors::MediumVioletRed.to_bg_color_string()}
+    fn bg_magenta3a(self) -> String {EightBitColors::Magenta3a.to_bg_color_string()}
+    fn bg_darkviolet1b(self) -> String {EightBitColors::DarkViolet1b.to_bg_color_string()}
+    fn bg_purple1b(self) -> String {EightBitColors::Purple1b.to_bg_color_string()}
+    fn bg_darkorange3a(self) -> String {EightBitColors::DarkOrange3a.to_bg_color_string()}
+    fn bg_indianred1a(self) -> String {EightBitColors::IndianRed1a.to_bg_color_string()}
+    fn bg_hotpink3a(self) -> String {EightBitColors::HotPink3a.to_bg_color_string()}
+    fn bg_mediumorchid3(self) -> String {EightBitColors::MediumOrchid3.to_bg_color_string()}
+    fn bg_mediumorchid(self) -> String {EightBitColors::MediumOrchid.to_bg_color_string()}
+    fn bg_mediumpurple2a(self) -> String {EightBitColors::MediumPurple2a.to_bg_color_string()}
+    fn bg_darkgoldenrod(self) -> String {EightBitColors::DarkGoldenrod.to_bg_color_string()}
+    fn bg_lightsalmon3a(self) -> String {EightBitColors::LightSalmon3a.to_bg_color_string()}
+    fn bg_rosybrown(self) -> String {EightBitColors::RosyBrown.to_bg_color_string()}
+    fn bg_grey63(self) -> String {EightBitColors::Grey63.to_bg_color_string()}
+    fn bg_mediumpurple2b(self) -> String {EightBitColors::MediumPurple2b.to_bg_color_string()}
+    fn bg_mediumpurple1(self) -> String {EightBitColors::MediumPurple1.to_bg_color_string()}
+    fn bg_gold3a(self) -> String {EightBitColors::Gold3a.to_bg_color_string()}
+    fn bg_darkkhaki(self) -> String {EightBitColors::DarkKhaki.to_bg_color_string()}
+    fn bg_navajowhite3(self) -> String {EightBitColors::NavajoWhite3.to_bg_color_string()}
+    fn bg_grey69(self) -> String {EightBitColors::Grey69.to_bg_color_string()}
+    fn bg_lightsteelblue3(self) -> String {EightBitColors::LightSteelBlue3.to_bg_color_string()}
+    fn bg_lightsteelblue(self) -> String {EightBitColors::LightSteelBlue.to_bg_color_string()}
+    fn bg_yellow3a(self) -> String {EightBitColors::Yellow3a.to_bg_color_string()}
+    fn bg_darkolivegreen3(self) -> String {EightBitColors::DarkOliveGreen3.to_bg_color_string()}
+    fn bg_darkseagreen3b(self) -> String {EightBitColors::DarkSeaGreen3b.to_bg_color_string()}
+    fn bg_darkseagreen2(self) -> String {EightBitColors::DarkSeaGreen2.to_bg_color_string()}
+    fn bg_lightcyan3(self) -> String {EightBitColors::LightCyan3.to_bg_color_string()}
+    fn bg_lightskyblue1(self) -> String {EightBitColors::LightSkyBlue1.to_bg_color_string()}
+    fn bg_greenyellow(self) -> String {EightBitColors::GreenYellow.to_bg_color_string()}
+    fn bg_darkolivegreen2(self) -> String {EightBitColors::DarkOliveGreen2.to_bg_color_string()}
+    fn bg_palegreen1b(self) -> String {EightBitColors::PaleGreen1b.to_bg_color_string()}
+    fn bg_darkseagreen5b(self) -> String {EightBitColors::DarkSeaGreen5b.to_bg_color_string()}
+    fn bg_darkseagreen5a(self) -> String {EightBitColors::DarkSeaGreen5a.to_bg_color_string()}
+    fn bg_paleturquoise1(self) -> String {EightBitColors::PaleTurquoise1.to_bg_color_string()}
+    fn bg_red3b(self) -> String {EightBitColors::Red3b.to_bg_color_string()}
+    fn bg_deeppink3a(self) -> String {EightBitColors::DeepPink3a.to_bg_color_string()}
+    fn bg_deeppink3b(self) -> String {EightBitColors::DeepPink3b.to_bg_color_string()}
+    fn bg_magenta3b(self) -> String {EightBitColors::Magenta3b.to_bg_color_string()}
+    fn bg_magenta3c(self) -> String {EightBitColors::Magenta3c.to_bg_color_string()}
+    fn bg_magenta2a(self) -> String {EightBitColors::Magenta2a.to_bg_color_string()}
+    fn bg_darkorange3b(self) -> String {EightBitColors::DarkOrange3b.to_bg_color_string()}
+    fn bg_indianred1b(self) -> String {EightBitColors::IndianRed1b.to_bg_color_string()}
+    fn bg_hotpink3b(self) -> String {EightBitColors::HotPink3b.to_bg_color_string()}
+    fn bg_hotpink2(self) -> String {EightBitColors::HotPink2.to_bg_color_string()}
+    fn bg_orchid(self) -> String {EightBitColors::Orchid.to_bg_color_string()}
+    fn bg_mediumorchid1a(self) -> String {EightBitColors::MediumOrchid1a.to_bg_color_string()}
+    fn bg_orange3(self) -> String {EightBitColors::Orange3.to_bg_color_string()}
+    fn bg_lightsalmon3b(self) -> String {EightBitColors::LightSalmon3b.to_bg_color_string()}
+    fn bg_lightpink3(self) -> String {EightBitColors::LightPink3.to_bg_color_string()}
+    fn bg_pink3(self) -> String {EightBitColors::Pink3.to_bg_color_string()}
+    fn bg_plum3(self) -> String {EightBitColors::Plum3.to_bg_color_string()}
+    fn bg_violet(self) -> String {EightBitColors::Violet.to_bg_color_string()}
+    fn bg_gold3b(self) -> String {EightBitColors::Gold3b.to_bg_color_string()}
+    fn bg_lightgoldenrod3(self) -> String {EightBitColors::LightGoldenrod3.to_bg_color_string()}
+    fn bg_tan(self) -> String {EightBitColors::Tan.to_bg_color_string()}
+    fn bg_mistyrose3(self) -> String {EightBitColors::MistyRose3.to_bg_color_string()}
+    fn bg_thistle3(self) -> String {EightBitColors::Thistle3.to_bg_color_string()}
+    fn bg_plum2(self) -> String {EightBitColors::Plum2.to_bg_color_string()}
+    fn bg_yellow3b(self) -> String {EightBitColors::Yellow3b.to_bg_color_string()}
+    fn bg_khaki3(self) -> String {EightBitColors::Khaki3.to_bg_color_string()}
+    fn bg_lightgoldenrod2a(self) -> String {EightBitColors::LightGoldenrod2a.to_bg_color_string()}
+    fn bg_lightyellow3(self) -> String {EightBitColors::LightYellow3.to_bg_color_string()}
+    fn bg_grey84(self) -> String {EightBitColors::Grey84.to_bg_color_string()}
+    fn bg_lightsteelblue1(self) -> String {EightBitColors::LightSteelBlue1.to_bg_color_string()}
+    fn bg_yellow2(self) -> String {EightBitColors::Yellow2.to_bg_color_string()}
+    fn bg_darkolivegreen1a(self) -> String {EightBitColors::DarkOliveGreen1a.to_bg_color_string()}
+    fn bg_darkolivegreen1b(self) -> String {EightBitColors::DarkOliveGreen1b.to_bg_color_string()}
+    fn bg_darkseagreen1(self) -> String {EightBitColors::DarkSeaGreen1.to_bg_color_string()}
+    fn bg_honeydew2(self) -> String {EightBitColors::Honeydew2.to_bg_color_string()}
+    fn bg_lightcyan1(self) -> String {EightBitColors::LightCyan1.to_bg_color_string()}
+    fn bg_red1(self) -> String {EightBitColors::Red1.to_bg_color_string()}
+    fn bg_deeppink2(self) -> String {EightBitColors::DeepPink2.to_bg_color_string()}
+    fn bg_deeppink1a(self) -> String {EightBitColors::DeepPink1a.to_bg_color_string()}
+    fn bg_deeppink1b(self) -> String {EightBitColors::DeepPink1b.to_bg_color_string()}
+    fn bg_magenta2b(self) -> String {EightBitColors::Magenta2b.to_bg_color_string()}
+    fn bg_magenta1(self) -> String {EightBitColors::Magenta1.to_bg_color_string()}
+    fn bg_orangered1(self) -> String {EightBitColors::OrangeRed1.to_bg_color_string()}
+    fn bg_indianred1c(self) -> String {EightBitColors::IndianRed1c.to_bg_color_string()}
+    fn bg_indianred1d(self) -> String {EightBitColors::IndianRed1d.to_bg_color_string()}
+    fn bg_hotpink1a(self) -> String {EightBitColors::HotPink1a.to_bg_color_string()}
+    fn bg_hotpink1b(self) -> String {EightBitColors::HotPink1b.to_bg_color_string()}
+    fn bg_mediumorchid1b(self) -> String {EightBitColors::MediumOrchid1b.to_bg_color_string()}
+    fn bg_darkorange(self) -> String {EightBitColors::DarkOrange.to_bg_color_string()}
+    fn bg_salmon1(self) -> String {EightBitColors::Salmon1.to_bg_color_string()}
+    fn bg_lightcoral(self) -> String {EightBitColors::LightCoral.to_bg_color_string()}
+    fn bg_palevioletred1(self) -> String {EightBitColors::PaleVioletRed1.to_bg_color_string()}
+    fn bg_orchid2(self) -> String {EightBitColors::Orchid2.to_bg_color_string()}
+    fn bg_orchid1(self) -> String {EightBitColors::Orchid1.to_bg_color_string()}
+    fn bg_orange1(self) -> String {EightBitColors::Orange1.to_bg_color_string()}
+    fn bg_sandybrown(self) -> String {EightBitColors::SandyBrown.to_bg_color_string()}
+    fn bg_lightsalmon1(self) -> String {EightBitColors::LightSalmon1.to_bg_color_string()}
+    fn bg_lightpink1(self) -> String {EightBitColors::LightPink1.to_bg_color_string()}
+    fn bg_pink1(self) -> String {EightBitColors::Pink1.to_bg_color_string()}
+    fn bg_plum1(self) -> String {EightBitColors::Plum1.to_bg_color_string()}
+    fn bg_gold1(self) -> String {EightBitColors::Gold1.to_bg_color_string()}
+    fn bg_lightgoldenrod2b(self) -> String {EightBitColors::LightGoldenrod2b.to_bg_color_string()}
+    fn bg_lightgoldenrod2c(self) -> String {EightBitColors::LightGoldenrod2c.to_bg_color_string()}
+    fn bg_navajowhite1(self) -> String {EightBitColors::NavajoWhite1.to_bg_color_string()}
+    fn bg_mistyrose1(self) -> String {EightBitColors::MistyRose1.to_bg_color_string()}
+    fn bg_thistle1(self) -> String {EightBitColors::Thistle1.to_bg_color_string()}
+    fn bg_yellow1(self) -> String {EightBitColors::Yellow1.to_bg_color_string()}
+    fn bg_lightgoldenrod1(self) -> String {EightBitColors::LightGoldenrod1.to_bg_color_string()}
+    fn bg_khaki1(self) -> String {EightBitColors::Khaki1.to_bg_color_string()}
+    fn bg_wheat1(self) -> String {EightBitColors::Wheat1.to_bg_color_string()}
+    fn bg_cornsilk1(self) -> String {EightBitColors::CornSilk1.to_bg_color_string()}
+    fn bg_grey100(self) -> String {EightBitColors::Grey100.to_bg_color_string()}
+    fn bg_grey3(self) -> String {EightBitColors::Grey3.to_bg_color_string()}
+    fn bg_grey7(self) -> String {EightBitColors::Grey7.to_bg_color_string()}
+    fn bg_grey11(self) -> String {EightBitColors::Grey11.to_bg_color_string()}
+    fn bg_grey15(self) -> String {EightBitColors::Grey15.to_bg_color_string()}
+    fn bg_grey19(self) -> String {EightBitColors::Grey19.to_bg_color_string()}
+    fn bg_grey23(self) -> String {EightBitColors::Grey23.to_bg_color_string()}
+    fn bg_grey27(self) -> String {EightBitColors::Grey27.to_bg_color_string()}
+    fn bg_grey30(self) -> String {EightBitColors::Grey30.to_bg_color_string()}
+    fn bg_grey35(self) -> String {EightBitColors::Grey35.to_bg_color_string()}
+    fn bg_grey39(self) -> String {EightBitColors::Grey39.to_bg_color_string()}
+    fn bg_grey42(self) -> String {EightBitColors::Grey42.to_bg_color_string()}
+    fn bg_grey46(self) -> String {EightBitColors::Grey46.to_bg_color_string()}
+    fn bg_grey50(self) -> String {EightBitColors::Grey50.to_bg_color_string()}
+    fn bg_grey54(self) -> String {EightBitColors::Grey54.to_bg_color_string()}
+    fn bg_grey58(self) -> String {EightBitColors::Grey58.to_bg_color_string()}
+    fn bg_grey62(self) -> String {EightBitColors::Grey62.to_bg_color_string()}
+    fn bg_grey66(self) -> String {EightBitColors::Grey66.to_bg_color_string()}
+    fn bg_grey70(self) -> String {EightBitColors::Grey70.to_bg_color_string()}
+    fn bg_grey74(self) -> String {EightBitColors::Grey74.to_bg_color_string()}
+    fn bg_grey78(self) -> String {EightBitColors::Grey78.to_bg_color_string()}
+    fn bg_grey82(self) -> String {EightBitColors::Grey82.to_bg_color_string()}
+    fn bg_grey85(self) -> String {EightBitColors::Grey85.to_bg_color_string()}
+    fn bg_grey89(self) -> String {EightBitColors::Grey89.to_bg_color_string()}
+    fn bg_grey93(self) -> String {EightBitColors::Grey93.to_bg_color_string()}
 }
 
 pub trait StringMarker {
