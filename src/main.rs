@@ -1,8 +1,11 @@
 use beni::ColorString;
 use beni::colors::EightBitColors::*;
-
+use beni::sys::csi;
 fn main() {
-    //windows::enable_ansi_csi_on_windows().expect("Failed to enable ansi csi.");
+    // if using on windows, necessary to execute following function. 
+    // but, if using on linux, unnecessary.
+    csi::enable_ansi_csi().expect("Failed to enable ansi csi.");
+
     let fg_g = "Hello".fg_color(Green);
     let bg_r = "Hello".bg_color(Red);
     let and = "Hello".bg_color(Red).fg_color(Green);
@@ -11,5 +14,5 @@ fn main() {
     println!("{}", bg_r);
     println!("{}", and);
     println!("{}", nand);
-    //println!("{}", s.fg_color(s, Red));
+
 }

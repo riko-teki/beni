@@ -2,7 +2,7 @@
 const ENABLE_VIRTUAL_TERMINAL_PROCESING: u32 = 0x0004;
 
 #[cfg(target_os = "windows")]
-pub fn enable_ansi_csi_on_windows() -> Result<(), std::io::Error> {
+pub fn enable_ansi_csi() -> Result<(), std::io::Error> {
     use std::ffi::OsStr;
     use std::iter::once;
     use std::os::windows::ffi::OsStrExt;
